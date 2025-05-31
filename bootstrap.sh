@@ -14,14 +14,20 @@
 HASH='031edd7d41651593c5fe5c006fa5752b37fddff7bc4e843aa6af0c950f4b9406' # (generated)
 # [[[end]]]
 
-if [ ! -d ansible-babun-bootstrap ]
- then
-  git clone https://github.com/tiangolo/ansible-babun-bootstrap.git
-else
-  cd ansible-babun-bootstrap
-  git pull
-  cd ..
-fi
+sudo apt install -y ansible git
+sudo ansible-pull -v -U https://github.com/imochoa/ansible-playbooks.git
 
-source ansible-babun-bootstrap/ansible-babun-bootstrap.sh
+# --private-key
+# -v
+
+# if [ ! -d ansible-babun-bootstrap ]
+#  then
+#   git clone https://github.com/tiangolo/ansible-babun-bootstrap.git
+# else
+#   cd ansible-babun-bootstrap
+#   git pull
+#   cd ..
+# fi
+
+# source ansible-babun-bootstrap/ansible-babun-bootstrap.sh
 

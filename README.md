@@ -19,7 +19,12 @@ https://www.youtube.com/watch?v=sn1HQq_GFNE
 22:45
 
 # ansible pull being killed?
+does not work with my git? sudo does not have nix-home manager
+
 
 # Semaphore UI
 
 # https://github.com/olivomarco/my-ansible-linux-setup
+
+# Ansible pull with private Github
+https://medium.com/planetarynetworks/ansible-pull-with-private-github-repository-d147fdf6f60b

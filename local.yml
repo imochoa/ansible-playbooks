@@ -1,15 +1,26 @@
-- hosts: localhost
+---
+- name: Local setup playbook
+  hosts: localhost
   connection: local
   become: true
 
   pre_tasks:
-    - name: update repositories
-      apt:
-        update_cache: yes
-      changed_when: False
-
+    - name: Update repositories
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      changed_when: false
 
   tasks:
-    - include: tasks/users.yml
-    - include: tasks/cron.yml
-    - include: tasks/packages.yml
+    # - name: Starting playbook
+    #   ansible.builtin.debug:
+    #     msg: task1
+    # - name: Set up ansible user
+    #   ansible.builtin.import_tasks:
+    #     file: tasks/users.yml
+    # - name: Set up cron job
+    #   ansible.builtin.import_tasks:
+    #     file: tasks/cron.yml
+    - name: Install packages
+      ansible.builtin.import_tasks:
+        file: tasks/packages.yml

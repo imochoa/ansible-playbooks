@@ -14,3 +14,10 @@ _default:
 
 anki-uid:
   python3 -c 'import random; print(random.randrange(1 << 30, 1 << 31))'
+
+update-hashes:
+  cog -r -s " # (generated)" ./bootstrap.sh
+  # -c for checksum
+
+run-local:
+  sudo $(which ansible-playbook) ./local.yml

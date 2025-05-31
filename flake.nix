@@ -26,6 +26,7 @@
         packages = with pkgs; [
           ansible
           ansible-lint
+          python313Packages.cogapp
           # ansible-vault
 
         ];

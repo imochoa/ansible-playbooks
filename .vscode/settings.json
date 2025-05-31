@@ -1,7 +1,8 @@
 {
     "editor.formatOnSave": true,
     "files.associations": {
-        "local.yml": "ansible"
+        "local.yml": "ansible",
+        // "tasks/*.yml": "ansible"
         // "*init.yml": "yaml",
     },
     "terminal.integrated.commandsToSkipShell": [
@@ -72,5 +73,6 @@
             }
         }
     },
-    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
+    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+    "ansible.python.interpreterPath": "/bin/python"
 }

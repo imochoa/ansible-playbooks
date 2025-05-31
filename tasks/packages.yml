@@ -1,6 +1,6 @@
 - name: Install packages
   ansible.builtin.apt:
-    name: "{{packages_to_install}}"
+    name: "{{ packages_to_install }}"
     state: present
 
 - name: Install Flatpak
@@ -12,17 +12,18 @@
   community.general.flatpak_remote:
     name: flathub
     state: present
-    url: https://flathub.org/repo/flathub.flatpakrepo
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
 
 - name: Set up Flatpak
   community.general.flatpak:
-    name: "{{flatpak_flathub_names}}"
+    name: "{{ flatpak_flathub_names }}"
     remote: flathub
     state: present
 
 - name: Testing cmd
   ansible.builtin.command:
     cmd: ["echo", "Hello, World!"]
+    changed_when: false
 
 # avoid using shell module unless you need shell features like pipes, redirection, etc.
 # You can also use the 'cmd' parameter instead of free form format.

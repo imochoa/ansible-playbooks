@@ -26,6 +26,7 @@
         packages = with pkgs; [
           ansible
           ansible-lint
+          fzf
           just
           (python3.withPackages (
             python-pkgs: with python-pkgs; [

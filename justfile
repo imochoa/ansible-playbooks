@@ -12,12 +12,26 @@ set shell := ["bash", "-euco", "pipefail"]
 _default:
     @just --choose
 
-anki-uid:
-  python3 -c 'import random; print(random.randrange(1 << 30, 1 << 31))'
+setup:
+  ansible-galaxy install .
 
-update-hashes:
-  cog -r -s " # (generated)" ./bootstrap.sh
-  # -c for checksum
+# # Install Ansible collections
+# ansible-galaxy collection install -r requirements.yml
+# # Install Ansible roles
+# ansible-galaxy role install -r requirements.yml
+# # Install Python dependencies
+# python3 -m pip install --user -r requirements.txt
+# # Install Ansible Lint
+# python3 -m pip install --user ansible-lint
+# # Install Ansible Test
+# python3 -m pip install --user ansible-test
+
+ci:
+  ansible-lint .
+
+# update-hashes:
+#   cog -r -s " # (generated)" ./bootstrap.sh
+#   # -c for checksum
 
 run-local:
   sudo $(which ansible-playbook) ./local.yml

@@ -21,3 +21,6 @@ update-hashes:
 
 run-local:
   sudo $(which ansible-playbook) ./local.yml
+
+
+# ansible-test sanity --docker

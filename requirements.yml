@@ -4,3 +4,4 @@
 # - src: https://github.com/mrlesmithjr/ansible-monit
 # - src: jnv.debian-backports
 - src: jnv.unattended-upgrades
+- src: community.general

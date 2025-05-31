@@ -26,9 +26,12 @@
         packages = with pkgs; [
           ansible
           ansible-lint
-          python313Packages.cogapp
-          # ansible-vault
-
+          just
+          (python3.withPackages (
+            python-pkgs: with python-pkgs; [
+              cogapp
+            ]
+          ))
         ];
         # inputsFrom = [
         #   # pkgs.hello

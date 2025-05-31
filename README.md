@@ -19,3 +19,7 @@ https://www.youtube.com/watch?v=sn1HQq_GFNE
 22:45
 
 # ansible pull being killed?
+
+# Semaphore UI
+
+# https://github.com/olivomarco/my-ansible-linux-setup

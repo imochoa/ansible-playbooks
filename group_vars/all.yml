@@ -1,4 +1,7 @@
 ---
+# Loaded by default
+# default_username: debian
+timezone: Europe/Berin
 packages_to_install:
   - curl
   - aptitude

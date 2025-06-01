@@ -14,13 +14,14 @@
     msg: "nix already installed, skipping script download/execution"
   when: dir_check.stat.exists
 
-- block:
+- name: Install Nix if directory does not exist
+  when: dir_check.stat.exists
+  block:
     - name: Ensure destination directory exists
       ansible.builtin.file:
         path: "/opt/determinate-systems"
         state: directory
         mode: "0755"
-
     # - name: Download and verify script
     #   ansible.builtin.get_url:
     #     url: "{{ script_runner.url }}"
@@ -28,7 +29,6 @@
     #     checksum: "{{ script_runner.checksum }}"
     #     mode: "{{ '0755' if script_runner.executable else '0644' }}"
     #   register: download_result
-
     - name: Download script
       ansible.builtin.get_url:
         url: "https://install.determinate.systems/nix"
@@ -51,42 +51,3 @@
 
   # when: command_check.rc != 0 # Only run block if command is missing
   # when: not dir_check.stat.exists # Only run block if directory doesn't exist
-  when: dir_check.stat.exists # Only run block if directory doesn't exist
-
-- name: Check if command already exists
-  # ansible.builtin.command:
-  #   argv:
-  #     - which
-  #     - nix
-  become: true
-  become_user: imochoa
-  ansible.builtin.command:
-    argv:
-      - whoami
-      # - which
-      # - ls
-  register: command_check
-  ignore_errors: true
-  changed_when: false
-- debug: var=command_check
-
-- name: Debug message if command exists (optional)
-  ansible.builtin.debug:
-    msg: "nix already installed, skipping script download/execution"
-  when: command_check.rc == 0
-
-- block:
-    # https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone
-    - name: FLAKE STANDALONE INSTALLATION
-      ansible.builtin.file:
-        path: "/opt/determinate-systems"
-        state: directory
-        mode: "0755"
-
-  #         nix run home-manager/master -- init
-
-  # For Nixpkgs or NixOS version 25.05 run
-
-  # nix run home-manager/release-25.05 -- init
-
-  when: command_check.rc != 0 # Only run block if command is missing

@@ -11,6 +11,12 @@
         cache_valid_time: 3600
       changed_when: false
 
+  # vars:
+  #   script_runner:
+  #     url: "https://install.determinate.systems/nix"
+  #     dest: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
+  #     checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
+  #     executable: true
   tasks:
     # - name: Starting playbook
     #   ansible.builtin.debug:
@@ -20,7 +26,14 @@
     #     file: tasks/users.yml
     # - name: Set up cron job
     #   ansible.builtin.import_tasks:
-    #     file: tasks/cron.yml
-    - name: Install packages
+    # #     file: tasks/cron.yml
+    # - name: Install packages
+    #   ansible.builtin.import_tasks:
+    #     file: tasks/packages.yml
+    - name: Install nix
       ansible.builtin.import_tasks:
-        file: tasks/packages.yml
+        file: tasks/nix.yml
+    - name: Install nix home-manager
+      ansible.builtin.import_tasks:
+        file: tasks/nix-home-manager.yml
+# podman...

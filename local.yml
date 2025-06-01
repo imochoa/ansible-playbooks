@@ -12,43 +12,22 @@
       changed_when: false
 
   # vars:
-  #   script_runner:
-  #     url: "https://install.determinate.systems/nix"
-  #     dest: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
-  #     checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
-  #     executable: true
-  tasks:
-    # - name: Get the username running the deploy
-    #   become: false
-    #   ansible.builtin.command: whoami
-    #   delegate_to: localhost
-    #   register: username_on_the_host
-    #   changed_when: false
+  #   some_variable: "value"
 
-    # - name: Test
-    #   ansible.builtin.debug:
-    #     var: username_on_the_host
-          
+  tasks:
+
     - name: Get facts about the host
       ansible.builtin.setup:
         gather_subset: all
       register: host_facts
 
-    #  - name: Test
-    #   ansible.builtin.debug:
-    #     var: host_facts['ansible_facts']
-
-    # - name: Test
-    #   ansible.builtin.debug:
-    #     var: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
-
-      
     - name: Setting host facts using complex arguments
       ansible.builtin.set_fact:
         username_on_the_host: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
-    # - name: Test
-    #   ansible.builtin.debug:
-    #     var: one_fact
+      # - name: Test
+      #   ansible.builtin.debug:
+      #     var: host_facts
+      #     var: username_on_the_host
 
 
     # - name: Starting playbook

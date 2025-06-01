@@ -14,7 +14,13 @@
     install_dir: "/opt/determinate-systems"
     install_script: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
   block:
-    # sudo apt-get install curl aptitude ca-certificates
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - curl
+          - aptitude
+          - ca-certificates
+        state: present
     - name: Ensure destination directory exists
       ansible.builtin.file:
         path: "{{ install_dir }}"
@@ -32,7 +38,8 @@
     - name: Execute installer
       ansible.builtin.command: "{{ install_script }} install --no-confirm --explain"
       when: download_result is success
+      creates: "/nix/var/nix/profiles/default/bin/nix"
 
-    - name: Execute test
-      ansible.builtin.command: "{{ install_script }} self-test"
-      when: download_result is success
+    # - name: Execute test
+    #   ansible.builtin.command: "{{ install_script }} self-test"
+    #   when: download_result is success

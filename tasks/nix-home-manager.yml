@@ -1,38 +1,92 @@
-- name: Check if command already exists
-  # ansible.builtin.command:
-  #   argv:
-  #     - which
-  #     - nix
-  become: true
-  become_user: imochoa
-  ansible.builtin.command:
-    argv:
-      - whoami
-      # - which
-      # - ls
-  register: command_check
-  ignore_errors: true
-  changed_when: false
+# - name: Check if command already exists
+#   # ansible.builtin.command:
+#   #   argv:
+#   #     - which
+#   #     - nix
+#   become: true
+#   become_user: imochoa
+#   ansible.builtin.command:
+#     argv:
+#       - whoami
+#       # - which
+#       # - ls
+#   register: command_check
+#   ignore_errors: true
+#   changed_when: false
 
-- debug: var=command_check
+# - debug: var=command_check
+
+- name: Check if nix directory exists
+  ansible.builtin.stat:
+    path: "/home/{{ user }}/.config/home-manager"
+  register: dir_check
 
 - name: Debug message if command exists (optional)
   ansible.builtin.debug:
     msg: "nix already installed, skipping script download/execution"
-  when: command_check.rc == 0
+  when: dir_check.stat.exists
 
-- name: Install Nix if command does not exist
-  when: command_check.rc != 0
+- name: Install Home Manager if directory does not exist
+  when: not dir_check.stat.exists
+  vars:
+    install_dir: "/opt/determinate-systems"
+    install_script: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
   block:
-    # https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone
-    - name: FLAKE STANDALONE INSTALLATION
-      ansible.builtin.file:
-        path: "/opt/determinate-systems"
-        state: directory
-        mode: "0755"
+    - name: Check if command already exists
+      become: true
+      become_user: imochoa
+      ansible.builtin.command:
+        argv:
+          - nix
+          - run
+          - home-manager/master
+          - --
+          - init
+      register: command_check
+      ignore_errors: true
+      changed_when: false
 
-  #         nix run home-manager/master -- init
+    - debug: var=command_check
 
-  # For Nixpkgs or NixOS version 25.05 run
+    - name: Check if command already exists
+      become: true
+      become_user: imochoa
+      ansible.builtin.command:
+        chdir: "/home/{{ user }}/.config/home-manager"
+        argv:
+          - home-manager
+          - switch
+      register: command_b
+      ignore_errors: true
+      changed_when: false
 
-  # nix run home-manager/release-25.05 -- init
+    - debug: var=command_b
+# - debug: var=command_checkkz
+
+# # If it's a private repo...
+# nix run nixpkgs#gh -- auth login
+# nix run nixpkgs#gh -- repo clone <user>/<repo> ~/your-home
+# # For public repos/after giving access to private ones...
+# nix run home-manager -- switch --flake ~/your-home#<flakename>
+
+# - name: Debug message if command exists (optional)
+#   ansible.builtin.debug:
+#     msg: "nix already installed, skipping script download/execution"
+#   when: command_check.rc == 0
+
+# - name: Install Nix if command does not exist
+#   when: command_check.rc != 0
+#   block:
+#     # https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone
+#     - name: FLAKE STANDALONE INSTALLATION
+#       ansible.builtin.file:
+#         path: "/opt/determinate-systems"
+#         state: directory
+#         mode: "0755"
+#         # /nix/var/nix/profiles/default/bin/nix
+
+#   #         nix run home-manager/master -- init
+
+#   # For Nixpkgs or NixOS version 25.05 run
+
+#   # nix run home-manager/release-25.05 -- init

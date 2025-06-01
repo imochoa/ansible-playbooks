@@ -1,6 +1,6 @@
 ---
 ansiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
-# user: imochoa
+user: imochoa
 # Loaded by default
 # default_username: debian
 timezone: Europe/Berin

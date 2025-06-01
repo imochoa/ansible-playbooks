@@ -18,6 +18,15 @@
   #     checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
   #     executable: true
   tasks:
+    - name: Get the username running the deploy
+      become: false
+      local_action: command whoami
+      register: username_on_the_host
+
+    - name: Test
+      ansible.builtin.debug:
+        var: username_on_the_host
+
     # - name: Starting playbook
     #   ansible.builtin.debug:
     #     msg: task1

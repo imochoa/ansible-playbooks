@@ -41,7 +41,7 @@
         allow_world_readable_tmpfiles: true
       ansible.builtin.command:
         argv:
-          - nix
+          - /nix/var/nix/profiles/default/bin/nix
           - run
           - home-manager/master
           - --

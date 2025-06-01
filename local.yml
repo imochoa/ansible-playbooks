@@ -38,7 +38,6 @@
     - name: Test
       ansible.builtin.debug:
         var: host_facts
-        verbosity: 2
       
 
     # - name: Starting playbook
@@ -50,9 +49,9 @@
     # - name: Set up cron job
     #   ansible.builtin.import_tasks:
     # #     file: tasks/cron.yml
-    # - name: Install packages
-    #   ansible.builtin.import_tasks:
-    #     file: tasks/packages.yml
+    - name: Install packages
+      ansible.builtin.import_tasks:
+        file: tasks/packages.yml
     - name: Install nix
       ansible.builtin.import_tasks:
         file: tasks/nix.yml

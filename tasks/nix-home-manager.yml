@@ -29,11 +29,11 @@
   when: dir_check.stat.exists
 
 # https://docs.ansible.com/ansible-core/2.16/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
-- name: Run Home Manager init command as stanalone Flake
+- name: Run Home Manager init command as standalone Flake
   become: true
   become_user: "{{ username_on_the_host }}"
-  vars:
-    allow_world_readable_tmpfiles: true
+  # vars:
+  #   allow_world_readable_tmpfiles: true
   ansible.builtin.command:
     argv:
       - /nix/var/nix/profiles/default/bin/nix
@@ -49,34 +49,33 @@
 - name: Show command_check result
   ansible.builtin.debug:
     var: command_check
-
 # move only file "home.nix" to backup somewhere
 
 # Clone a repo .config/home-manager
 
 # nix switch
 
-- name: Install Home Manager if directory does not exist
-  when: not dir_check.stat.exists
-  vars:
-    someVar: "/opt/determinate-systems"
-  block:
+# - name: Install Home Manager if directory does not exist
+#   when: not dir_check.stat.exists
+#   vars:
+#     someVar: "/opt/determinate-systems"
+#   block:
 
-    # - name: Check if command already exists
-    #   become: true
-    #   become_user: "{{ username_on_the_host }}"
-    #   ansible.builtin.command:
-    #     chdir: "/home/{{  username_on_the_host }}/.config/home-manager"
-    #     argv:
-    #       - home-manager
-    #       - switch
-    #   register: command_b
-    #   ignore_errors: true
-    #   changed_when: false
+# - name: Check if command already exists
+#   become: true
+#   become_user: "{{ username_on_the_host }}"
+#   ansible.builtin.command:
+#     chdir: "/home/{{  username_on_the_host }}/.config/home-manager"
+#     argv:
+#       - home-manager
+#       - switch
+#   register: command_b
+#   ignore_errors: true
+#   changed_when: false
 
-    # - name: Show command_check result
-    #   ansible.builtin.debug:
-    #     var: command_b
+# - name: Show command_check result
+#   ansible.builtin.debug:
+#     var: command_b
 # - debug: var=command_checkkz
 
 # # If it's a private repo...

@@ -1,0 +1,92 @@
+# - name: Check if command already exists
+#   ansible.builtin.command: "which nix"
+#   register: command_check
+#   ignore_errors: true
+#   changed_when: false
+
+- name: Check if nix directory exists
+  ansible.builtin.stat:
+    path: "/nix"
+  register: dir_check
+
+- name: Debug message if command exists (optional)
+  ansible.builtin.debug:
+    msg: "nix already installed, skipping script download/execution"
+  when: dir_check.stat.exists
+
+- block:
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: "/opt/determinate-systems"
+        state: directory
+        mode: "0755"
+
+    # - name: Download and verify script
+    #   ansible.builtin.get_url:
+    #     url: "{{ script_runner.url }}"
+    #     dest: "{{ script_runner.dest }}"
+    #     checksum: "{{ script_runner.checksum }}"
+    #     mode: "{{ '0755' if script_runner.executable else '0644' }}"
+    #   register: download_result
+
+    - name: Download script
+      ansible.builtin.get_url:
+        url: "https://install.determinate.systems/nix"
+        dest: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
+        checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
+        mode: "0755"
+      register: download_result
+
+    # - name: Execute script
+    #   ansible.builtin.command: "{{ script_runner.dest }} {{ script_runner.args | default('') }}"
+    #   when: download_result is success
+
+    # - name: Execute installer
+    #   ansible.builtin.command: "/opt/determinate-systems/determinate-systems-nix-installer.sh install --no-confirm --explain linux"
+    #   when: download_result is success
+
+    # - name: Execute test
+    #   ansible.builtin.command: "/opt/determinate-systems/determinate-systems-nix-installer.sh self-test --no-confirm "
+    #   when: download_result is success
+
+  # when: command_check.rc != 0 # Only run block if command is missing
+  # when: not dir_check.stat.exists # Only run block if directory doesn't exist
+  when: dir_check.stat.exists # Only run block if directory doesn't exist
+
+- name: Check if command already exists
+  # ansible.builtin.command:
+  #   argv:
+  #     - which
+  #     - nix
+  become: true
+  become_user: imochoa
+  ansible.builtin.command:
+    argv:
+      - whoami
+      # - which
+      # - ls
+  register: command_check
+  ignore_errors: true
+  changed_when: false
+- debug: var=command_check
+
+- name: Debug message if command exists (optional)
+  ansible.builtin.debug:
+    msg: "nix already installed, skipping script download/execution"
+  when: command_check.rc == 0
+
+- block:
+    # https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone
+    - name: FLAKE STANDALONE INSTALLATION
+      ansible.builtin.file:
+        path: "/opt/determinate-systems"
+        state: directory
+        mode: "0755"
+
+  #         nix run home-manager/master -- init
+
+  # For Nixpkgs or NixOS version 25.05 run
+
+  # nix run home-manager/release-25.05 -- init
+
+  when: command_check.rc != 0 # Only run block if command is missing

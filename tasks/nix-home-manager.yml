@@ -29,12 +29,11 @@
 - name: Install Home Manager if directory does not exist
   when: not dir_check.stat.exists
   vars:
-    install_dir: "/opt/determinate-systems"
-    install_script: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
+    someVar: "/opt/determinate-systems"
   block:
     - name: Check if command already exists
       become: true
-      become_user: imochoa
+      become_user: "{{ username_on_the_host }}"
       ansible.builtin.command:
         argv:
           - nix
@@ -46,21 +45,25 @@
       ignore_errors: true
       changed_when: false
 
-    - debug: var=command_check
+    - name: Show command_check result
+      ansible.builtin.debug:
+        var: command_check
 
-    - name: Check if command already exists
-      become: true
-      become_user: imochoa
-      ansible.builtin.command:
-        chdir: "/home/{{ user }}/.config/home-manager"
-        argv:
-          - home-manager
-          - switch
-      register: command_b
-      ignore_errors: true
-      changed_when: false
+    # - name: Check if command already exists
+    #   become: true
+    #   become_user: "{{ username_on_the_host }}"
+    #   ansible.builtin.command:
+    #     chdir: "/home/{{  username_on_the_host }}/.config/home-manager"
+    #     argv:
+    #       - home-manager
+    #       - switch
+    #   register: command_b
+    #   ignore_errors: true
+    #   changed_when: false
 
-    - debug: var=command_b
+    # - name: Show command_check result
+    #   ansible.builtin.debug:
+    #     var: command_b
 # - debug: var=command_checkkz
 
 # # If it's a private repo...

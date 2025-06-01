@@ -16,9 +16,11 @@
 
 # - debug: var=command_check
 
-- name: Check if nix directory exists
+# acl pkgs
+
+- name: Check if home manager directory exists
   ansible.builtin.stat:
-    path: "/home/{{ user }}/.config/home-manager"
+    path: "/home/{{ username_on_the_host }}/.config/home-manager"
   register: dir_check
 
 - name: Debug message if command exists (optional)
@@ -31,7 +33,7 @@
   vars:
     someVar: "/opt/determinate-systems"
   block:
-    - name: Check if command already exists
+    - name: Run Home Manager init command as stanalone Flake
       become: true
       become_user: "{{ username_on_the_host }}"
       ansible.builtin.command:

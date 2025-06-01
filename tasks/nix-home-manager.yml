@@ -20,12 +20,12 @@
 
 - name: Check if home manager directory exists
   ansible.builtin.stat:
-    path: "/home/{{ username_on_the_host }}/.config/home-manager"
+    path: "/home/imo/.config/home-manager"
   register: dir_check
 
 - name: Debug message if command exists (optional)
   ansible.builtin.debug:
-    msg: "nix already installed, skipping script download/execution"
+    msg: "nix alreadksy installed, skipping script download/execution"
   when: dir_check.stat.exists
 
 - name: Install Home Manager if directory does not exist
@@ -33,9 +33,10 @@
   vars:
     someVar: "/opt/determinate-systems"
   block:
+    # https://docs.ansible.com/ansible-core/2.16/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
     - name: Run Home Manager init command as stanalone Flake
       become: true
-      become_user: "{{ username_on_the_host }}"
+      become_user: "imo"
       vars:
         allow_world_readable_tmpfiles: true
       ansible.builtin.command:

@@ -15,7 +15,7 @@
   when: dir_check.stat.exists
 
 - name: Install Nix if directory does not exist
-  when: dir_check.stat.exists
+  when: not dir_check.stat.exists
   block:
     - name: Ensure destination directory exists
       ansible.builtin.file:

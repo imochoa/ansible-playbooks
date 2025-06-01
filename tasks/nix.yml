@@ -16,10 +16,13 @@
 
 - name: Install Nix if directory does not exist
   when: not dir_check.stat.exists
+  vars:
+    install_dir: "/opt/determinate-systems"
+    install_script: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
   block:
     - name: Ensure destination directory exists
       ansible.builtin.file:
-        path: "/opt/determinate-systems"
+        path: "{{ install_dir }}"
         state: directory
         mode: "0755"
     # - name: Download and verify script
@@ -32,7 +35,7 @@
     - name: Download script
       ansible.builtin.get_url:
         url: "https://install.determinate.systems/nix"
-        dest: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
+        dest: "{{ install_script }}"
         checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
         mode: "0755"
       register: download_result
@@ -41,12 +44,12 @@
     #   ansible.builtin.command: "{{ script_runner.dest }} {{ script_runner.args | default('') }}"
     #   when: download_result is success
 
-    # - name: Execute installer
-    #   ansible.builtin.command: "/opt/determinate-systems/determinate-systems-nix-installer.sh install --no-confirm --explain linux"
-    #   when: download_result is success
+    - name: Execute installer
+      ansible.builtin.command: "{{ install_script }} install --no-confirm --explain"
+      when: download_result is success
 
     # - name: Execute test
-    #   ansible.builtin.command: "/opt/determinate-systems/determinate-systems-nix-installer.sh self-test --no-confirm "
+    #   ansible.builtin.command: "{{ install_script }} self-test --no-confirm "
     #   when: download_result is success
 
   # when: command_check.rc != 0 # Only run block if command is missing

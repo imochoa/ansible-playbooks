@@ -45,8 +45,8 @@
      
     - name: Setting host facts using complex arguments
       ansible.builtin.set_fact:
-        one_fact: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
-
+        # one_fact: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
+        one_fact: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
     - name: Test
       ansible.builtin.debug:
         var: one_fact

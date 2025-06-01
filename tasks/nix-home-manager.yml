@@ -36,6 +36,8 @@
     - name: Run Home Manager init command as stanalone Flake
       become: true
       become_user: "{{ username_on_the_host }}"
+      vars:
+        allow_world_readable_tmpfiles: true
       ansible.builtin.command:
         argv:
           - nix

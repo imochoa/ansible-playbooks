@@ -1,7 +1,6 @@
 ---
 ansiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
 HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
-user: imochoa
 # Loaded by default
 # default_username: debian
 timezone: Europe/Berin

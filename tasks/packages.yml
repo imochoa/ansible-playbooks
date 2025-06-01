@@ -41,7 +41,7 @@
     state: present
 - name: Install VSCode extensions
   become: true
-  become_user: "imo"
+  become_user: "{{ username_on_the_host }}"
   ansible.builtin.command:
     cmd: code --install-extension {{ item }}
   loop:

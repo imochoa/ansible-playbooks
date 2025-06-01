@@ -4,7 +4,7 @@
 #   #     - which
 #   #     - nix
 #   become: true
-#   become_user: imochoa
+#   become_user: {{ username_on_the_host}}username_on_the_hostchoa
 #   ansible.builtin.command:
 #     argv:
 #       - whoami
@@ -20,7 +20,7 @@
 
 - name: Check if home manager directory exists
   ansible.builtin.stat:
-    path: "/home/imo/.config/home-manager"
+    path: "/home/{{ username_on_the_host }}/.config/home-manager"
   register: dir_check
 
 - name: Debug message if command exists (optional)
@@ -28,31 +28,39 @@
     msg: "nix alreadksy installed, skipping script download/execution"
   when: dir_check.stat.exists
 
+# https://docs.ansible.com/ansible-core/2.16/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
+- name: Run Home Manager init command as stanalone Flake
+  become: true
+  become_user: "{{ username_on_the_host }}"
+  vars:
+    allow_world_readable_tmpfiles: true
+  ansible.builtin.command:
+    argv:
+      - /nix/var/nix/profiles/default/bin/nix
+      - run
+      - home-manager/master
+      - --
+      - init
+    creates: /home/{{ username_on_the_host }}/.config/home-manager
+  register: command_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Show command_check result
+  ansible.builtin.debug:
+    var: command_check
+
+# move only file "home.nix" to backup somewhere
+
+# Clone a repo .config/home-manager
+
+# nix switch
+
 - name: Install Home Manager if directory does not exist
   when: not dir_check.stat.exists
   vars:
     someVar: "/opt/determinate-systems"
   block:
-    # https://docs.ansible.com/ansible-core/2.16/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
-    - name: Run Home Manager init command as stanalone Flake
-      become: true
-      become_user: "imo"
-      vars:
-        allow_world_readable_tmpfiles: true
-      ansible.builtin.command:
-        argv:
-          - /nix/var/nix/profiles/default/bin/nix
-          - run
-          - home-manager/master
-          - --
-          - init
-      register: command_check
-      ignore_errors: true
-      changed_when: false
-
-    - name: Show command_check result
-      ansible.builtin.debug:
-        var: command_check
 
     # - name: Check if command already exists
     #   become: true

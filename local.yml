@@ -18,38 +18,37 @@
   #     checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
   #     executable: true
   tasks:
-    - name: Get the username running the deploy
-      become: false
-      ansible.builtin.command: whoami
-      delegate_to: localhost
-      register: username_on_the_host
-      changed_when: false
+    # - name: Get the username running the deploy
+    #   become: false
+    #   ansible.builtin.command: whoami
+    #   delegate_to: localhost
+    #   register: username_on_the_host
+    #   changed_when: false
 
-    - name: Test
-      ansible.builtin.debug:
-        var: username_on_the_host
+    # - name: Test
+    #   ansible.builtin.debug:
+    #     var: username_on_the_host
           
     - name: Get facts about the host
       ansible.builtin.setup:
         gather_subset: all
       register: host_facts
 
-    - name: Test
-      ansible.builtin.debug:
-        var: host_facts['ansible_facts']
+    #  - name: Test
+    #   ansible.builtin.debug:
+    #     var: host_facts['ansible_facts']
 
-    - name: Test
-      ansible.builtin.debug:
-        var: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
+    # - name: Test
+    #   ansible.builtin.debug:
+    #     var: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
 
-     
+      
     - name: Setting host facts using complex arguments
       ansible.builtin.set_fact:
-        # one_fact: host_facts['ansible_facts']['ansible_env']['SUDO_USER']
-        one_fact: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
-    - name: Test
-      ansible.builtin.debug:
-        var: one_fact
+        username_on_the_host: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
+    # - name: Test
+    #   ansible.builtin.debug:
+    #     var: one_fact
 
 
     # - name: Starting playbook

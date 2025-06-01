@@ -34,11 +34,15 @@
         gather_subset: all
       register: host_facts
 
+    - name: Test
+      ansible.builtin.debug:
+        var: host_facts['ansible_facts']
 
     - name: Test
       ansible.builtin.debug:
-        var: host_facts
-      
+        var: host_facts['ansible_facts']['ansible_env']
+
+    
 
     # - name: Starting playbook
     #   ansible.builtin.debug:

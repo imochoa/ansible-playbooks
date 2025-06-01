@@ -13,6 +13,7 @@ You can view the original video for this repository [here](https://youtu.be/sn1H
 
 sudo ansible-pull -U https://github.com/<org>/repo.git
 
+ansible-pull -v -U https://github.com/imochoa/ansible-playbooks.git --ask-become-pass
 
 Continue:
 https://www.youtube.com/watch?v=sn1HQq_GFNE

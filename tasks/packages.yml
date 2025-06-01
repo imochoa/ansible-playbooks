@@ -7,6 +7,7 @@
   ansible.builtin.apt:
     name: flatpak
     state: present
+#     sudo apt install gnome-software-plugin-flatpak
 
 - name: Add Flathub repository
   community.general.flatpak_remote:
@@ -19,13 +20,36 @@
     name: "{{ flatpak_flathub_names }}"
     remote: flathub
     state: present
-# - name: Testing cmd
-#   ansible.builtin.command:
-#     cmd: ["echo", "Hello, World!"]
 
-# # avoid using shell module unless you need shell features like pipes, redirection, etc.
-# # You can also use the 'cmd' parameter instead of free form format.
-# - name: This command will change the working directory to somedir/
-#   ansible.builtin.shell:
-#     cmd: ls -l | grep log
-#     chdir: somedir/
+# Snap packages
+- name: Ensure snapd is installed
+  ansible.builtin.apt:
+    name: snapd
+    state: present
+- name: Install Snap packages
+  community.general.snap:
+    name:
+      - 1password
+      - chromium
+      - code
+      - firmware-updater
+      # brave, slack, spotify, zoom-client
+    state: present
+- name: Install Code
+  community.general.snap:
+    classic: true
+    name: code
+    state: present
+- name: Install VSCode extensions
+  ansible.builtin.command:
+    cmd: code --install-extension {{ item }}
+  loop:
+    - ms-python.python
+    - ms-toolsai.jupyter
+    - ms-vscode.cpptools
+    - ms-vscode.cmake-tools
+    - ms-vscode.makefile-tools
+    - ms-vscode.js-debug
+    - ms-vscode.node-debug2
+    - ms-vscode.node-debug
+    - ms-vscode.vscode-typescript-tslint-plugin

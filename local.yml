@@ -28,6 +28,18 @@
     - name: Test
       ansible.builtin.debug:
         var: username_on_the_host
+          
+    - name: Get facts about the host
+      ansible.builtin.setup:
+        gather_subset: all
+      register: host_facts
+
+
+    - name: Test
+      ansible.builtin.debug:
+        var: host_facts
+        verbosity: 2
+      
 
     # - name: Starting playbook
     #   ansible.builtin.debug:

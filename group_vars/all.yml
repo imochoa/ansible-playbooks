@@ -1,5 +1,6 @@
 ---
 ansiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
+HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
 user: imochoa
 # Loaded by default
 # default_username: debian
@@ -93,3 +94,19 @@ packages_to_install:
   # - glances
   # - gnupg
   # - exim4
+snap_packages:
+  - 1password
+  - chromium
+  - code
+  - firmware-updater
+  # brave, slack, spotify, zoom-client
+vscode_extensions:
+  - ms-python.python
+  - ms-toolsai.jupyter
+  - ms-vscode.cpptools
+  - ms-vscode.cmake-tools
+  - ms-vscode.makefile-tools
+  - ms-vscode.js-debug
+  - ms-vscode.node-debug2
+  - ms-vscode.node-debug
+  - ms-vscode.vscode-typescript-tslint-plugin

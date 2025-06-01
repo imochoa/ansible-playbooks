@@ -1,5 +1,5 @@
 ---
-repo: git@github.com:imochoa/ansible-playbooks.git
+ansiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
 # user: imochoa
 # Loaded by default
 # default_username: debian

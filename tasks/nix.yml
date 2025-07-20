@@ -1,45 +1,38 @@
-- name: Check if nix directory exists
+# Clone to ~/.config/home-manager
+
+# - name: Check if my_package is installed
+#   ansible.builtin.shell: which nix
+#   # become: true
+#   # become_user: "{{ username_on_the_host }}"
+#   register: nix_check
+#   failed_when: nix_check.rc > 1
+#   changed_when: nix_check.rc == 1
+
+- name: Get stats of the FS object
   ansible.builtin.stat:
-    path: "/nix"
-  register: dir_check
+    path: /nix/var/nix/profiles/default/bin/nix
+  register: nix_check
 
-- name: Debug message if command exists (optional)
-  ansible.builtin.debug:
-    msg: "nix already installed, skipping script download/execution"
-  when: dir_check.stat.exists
+# - name: Starting playbook
+#   ansible.builtin.debug:
+#     msg: { { nix_check } }
 
-- name: Install Nixks if directory does not exist
-  when: not dir_check.stat.exists
-  vars:
-    install_dir: "/opt/determinate-systems"
-    install_script: "/opt/determinate-systems/determinate-systems-nix-installer.sh"
-  block:
-    - name: Install required packages
-      ansible.builtin.apt:
-        name:
-          - curl
-          - aptitude
-          - ca-certificates
-        state: present
-    - name: Ensure destination directory exists
-      ansible.builtin.file:
-        path: "{{ install_dir }}"
-        state: directory
-        mode: "0755"
-    # curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-    - name: Download script
-      ansible.builtin.get_url:
-        url: "https://install.determinate.systems/nix"
-        dest: "{{ install_script }}"
-        checksum: "sha256:101a2169e079fb3b5d92a22040d636025857d0ab2ef6e0fdb0762b26f5580c7d"
-        mode: "0755"
-      register: download_result
+- name: Download determinate nix installer
+  ansible.builtin.get_url:
+    url: https://install.determinate.systems/nix
+    dest: /tmp/determinate-nix.sh
+    checksum: sha256:46555f126c17dfe27bb33fedd4dc9b246abf55c147b04a8e929b65e16cd730a6
+  when: not nix_check.stat.exists
 
-    - name: Execute installer
-      ansible.builtin.command: "{{ install_script }} install --no-confirm --explain"
-      when: download_result is success
-      creates: "/nix/var/nix/profiles/default/bin/nix"
-
-    # - name: Execute test
-    #   ansible.builtin.command: "{{ install_script }} self-test"
-    #   when: download_result is success
+# https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+- name: Install nix
+  become: true
+  ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --determinate --no-confirm --explain
+  when: not nix_check.stat.exists
+# # Home manager...
+# # TODO issues running in an env with nix available?
+# # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+# - name: Switch home manager
+#   become: true
+#   become_user: "{{ username_on_the_host }}"
+#   ansible.builtin.shell: /nix/var/nix/profiles/default/bin/nix run home-manager -- init --switch

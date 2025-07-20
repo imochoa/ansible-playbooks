@@ -31,26 +31,157 @@
     name:
       - 1password
       - chromium
-      - firmware-updater
+      # - firmware-updater
       # brave, slack, spotify, zoom-client
     state: present
-- name: Install Code
-  community.general.snap:
-    classic: true
-    name: code
-    state: present
+- name: Check if my_package is installed
+  command: dpkg-query -W code
+  register: my_package_check_deb
+  failed_when: my_package_check_deb.rc > 1
+  changed_when: my_package_check_deb.rc == 1
+# - name: Download Code .deb
+#   ansible.builtin.get_url:
+#     url: https://code.visualstudio.com/docs/?dv=linux64_deb
+#     dest: /tmp/code.deb
+#     checksum: sha256:349cc1b261547c533ddc479dbed1e63c395818c119dede27797896ced2924ab7
+#     when: my_package_check_deb.rc == 1
+
+- name: Install
+  ansible.builtin.apt:
+    deb: "https://vscode.download.prss.microsoft.com/dbazure/download/stable/7adae6a56e34cb64d08899664b814cf620465925/code_1.102.1-1752598717_amd64.deb"
+  # sudo: true
+  when: my_package_check_deb.rc == 1
+
+# https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
 - name: Install VSCode extensions
   become: true
   become_user: "{{ username_on_the_host }}"
   ansible.builtin.command:
     cmd: code --install-extension {{ item }}
-  loop:
-    - ms-python.python
-    - ms-toolsai.jupyter
-    - ms-vscode.cpptools
-    - ms-vscode.cmake-tools
-    - ms-vscode.makefile-tools
-    - ms-vscode.js-debug
-    - ms-vscode.node-debug2
-    - ms-vscode.node-debug
-    - ms-vscode.vscode-typescript-tslint-plugin
+  loop: "{{vscode_extensions}}"
+
+# TODO chromium extensions
+# TODO git setup
+
+- name: Set Git user.name
+  community.general.git_config:
+    name: user.name
+    value: "imochoa"
+    scope: global
+    state: present
+  become_user: "{{ username_on_the_host }}"
+
+- name: Set Git user.email
+  community.general.git_config:
+    name: user.email
+    value: "18612100+imochoa@users.noreply.github.com"
+    scope: global
+    state: present
+  become_user: "{{ username_on_the_host }}"
+
+# TODO: copy .ssh dir
+
+# - name: Add a host in the configuration
+#   community.general.ssh_config:
+#     user: akasurde
+#     host: "example.com"
+#     add_keys_to_agent: true
+#     hostname: "github.com"
+#     identity_file: "/home/akasurde/.ssh/id_rsa"
+#     port: "2223"
+#     state: present
+#     other_options:
+#       serveraliveinterval: "30"
+
+# - name: Copy local ~/.ssh to remote user
+#   hosts: all
+#   become: yes
+#   tasks:
+- name: Ensure remote .ssh directory exists
+  file:
+    path: /home/{{ username_on_the_host }}/.ssh
+    state: directory
+    owner: "{{ username_on_the_host }}"
+    group: "{{ username_on_the_host }}"
+    mode: "0700"
+#     - name: Copy SSH directory to remote user
+#       ansible.posix.synchronize:
+#         src: ~/.ssh/
+#         dest: /home/your_user/.ssh/
+#         recursive: yes
+#         rsync_opts:
+#           - "--chmod=700"
+#       delegate_to: localhost
+
+#     - name: Set correct permissions on private key
+#       file:
+#         path: /home/your_user/.ssh/id_rsa
+#         owner: your_user
+#         group: your_user
+#         mode: '0600'
+#       when: ansible_facts['os_family'] != 'Windows'
+
+#     - name: Set correct permissions on public key
+#       file:
+#         path: /home/your_user/.ssh/id_rsa.pub
+#         owner: your_user
+#         group: your_user
+#         mode: '0644'
+#       when: ansible_facts['os_family'] != 'Windows'
+
+# Auto-start syncthing
+# Syncthing
+# Through apt -> https://apt.syncthing.net/
+# create startup app
+# cp /usr/share/applications/syncthing-start.desktop ~/.config/autostart/
+
+# syncthing
+# cd ~/.config/systemd/user/
+# imochoa@box:~/.config/systemd/user$ curl -LO https://raw.githubusercontent.com/syncthing/syncthing/refs/heads/main/etc/linux-systemd/system/syncthing%40.service
+# need to rename it so it has @imochoa
+# mv syncthing.service syncthing@imochoa.service
+# imochoa@box:~/.config/systemd/user$ systemctl daemon-reload
+# imochoa@box:~/.config/systemd/user$ systemctl --user start syncthing.service
+# Failed to start syncthing.service: Unit syncthing.service not found.
+# imochoa@box:~/.config/systemd/user$ systemctl --user start syncthing@imochoa.service
+# imochoa@box:~/.config/systemd/user$ systemctl --user enable syncthing@imochoa.service
+# /usr/local/lib/systemd/system
+
+# TODO: try as system service
+
+# loginctl enable-linger imochoa
+# sudo loginctl enable-linger $USER
+
+# ZSH as default
+# # ZSH setup
+# # register shell
+# sudo sh -c "echo \"`which zsh`\" >> /etc/shells"
+# # YOU MUST LOG OUT TO SEE THE CHANGE
+# sudo chsh -s $(which zsh) $USER
+
+# JOPLIN
+# 1. get plugin `.jpl` from [the repo](https://github.com/joplin/plugins/tree/master/plugins)
+# 2. Copy to `~/.config/joplin-desktop/plugins`
+# 	> This path might be different on your device - check at the top of the Options page in the Configuration screen)
+- name: Ensure remote .ssh directory exists
+  file:
+    path: /home/{{ username_on_the_host }}/.config/joplin-desktop/plugins
+    state: directory
+    owner: "{{ username_on_the_host }}"
+    group: "{{ username_on_the_host }}"
+- name: Download joplin plugins
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
+    dest: "/home/{{ username_on_the_host }}/.config/joplin-desktop/plugins/{{ item }}.jpl"
+  loop: "{{ joplin_plugins }}"
+# - name: Download joplin plugin file and with check (sha256)
+#   become: true
+#   become_user: "{{ username_on_the_host }}"
+#   ansible.builtin.get_url:
+#     url: "https://raw.github.com/joplin/plugins/master/plugins/{{item}}/plugin.jpl"
+#     dest: "{{ username_on_the_host }}/.config/joplin-desktop/plugins/"
+#     # checksum: sha256:b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c
+#   loop:
+#     "{{joplinPlugins}}"
+#     # loop_control:
+#     #   loop_var: plugin

@@ -19,6 +19,14 @@ Continue:
 https://www.youtube.com/watch?v=sn1HQq_GFNE
 22:45
 
+# Set values before calling?
+-e, --extra-vars
+
+    set additional variables as key=value or YAML/JSON, if filename prepend with @. This argument may be specified multiple times.
+--extra-vars "@some_file.json"
+--extra-vars "@some_file.Yaml"
+
+
 # ansible pull being killed?
 does not work with my git? sudo does not have nix-home manager
 

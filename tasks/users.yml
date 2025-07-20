@@ -3,10 +3,63 @@
     name: ansible
     system: true
 
-- name: Copy sudoers_ansible
-  ansible.builtin.copy:
-    src: files/sudoers_ansible
-    dest: /etc/sudoers.d/ansible
-    owner: root
-    group: root
-    mode: "0440"
+# - name: Copy sudoers_ansible
+#   ansible.builtin.copy:
+#     src: files/sudoers_ansible
+#     dest: /etc/sudoers.d/ansible
+#     owner: root
+#     group: root
+#     mode: "0440"
+
+- name: "Allow ansible user to sudo without a password"
+  ansible.bulitin.lineinfile:
+    dest: " /etc/sudoers.d/ansible" # path: in version 2.3
+    state: "present"
+    regexp: "^%ansible"
+    line: "%ansible ALL=(ALL) NOPASSWD: ALL"
+- name: "Add authorized keys"
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'files/'+ item + '.key.pub') }}"
+
+# add to ssh group?
+- name: Ensure correct SSH directory permissions
+  ansible.builtin.file:
+    path: "/home/{{ username_on_the_host }}/.ssh"
+    state: directory
+    owner: "{{ username_on_the_host }}"
+    group: "{{ username_on_the_host }}"
+    mode: "0700"
+
+- name: Start SSH agent and set environment variables
+  ansible.builtin.shell: |
+    eval "$(ssh-agent -s)"
+    echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK; SSH_AGENT_PID=$SSH_AGENT_PID"
+  register: ssh_agent_output
+  changed_when: false # Avoids reporting "changed" on every run
+
+- name: Set SSH agent environment variables
+  ansible.builtin.set_fact:
+    ssh_auth_sock: "{{ ssh_agent_output.stdout | regex_search('SSH_AUTH_SOCK=([^;]+)') }}"
+    ssh_agent_pid: "{{ ssh_agent_output.stdout | regex_search('SSH_AGENT_PID=([^;]+)') }}"
+
+- name: Add SSH private key to agent
+  ansible.builtin.shell: |
+    ssh-add /path/to/private_key  # Replace with your key path
+  environment:
+    SSH_AUTH_SOCK: "{{ ssh_auth_sock }}"
+  no_log: true # Hides sensitive key paths from logs
+
+- name: Clone a repo using SSH agent
+  ansible.builtin.git:
+    repo: "{{ AnsiblePullRepo }}"
+    version: master
+    update: yes
+    dest: "/path/to/clone"
+  environment:
+    SSH_AUTH_SOCK: "{{ ssh_auth_sock }}"
+
+- name: List keys in agent
+  ansible.builtin.shell: "ssh-add -l"
+  environment:
+    SSH_AUTH_SOCK: "{{ ssh_auth_sock }}"

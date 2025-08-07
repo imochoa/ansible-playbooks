@@ -1,7 +1,30 @@
 ---
-# - src: nickjj.fail2ban
-# - src: nickjj.docker
-# - src: https://github.com/mrlesmithjr/ansible-monit
-# - src: jnv.debian-backports
-- src: jnv.unattended-upgrades
-- src: community.general
+# roles:
+#   # - src: jnv.unattended-upgrades
+#   - src: ./roles/macos
+#   # - src: roles/debian
+# # Install a role from the Ansible Galaxy
+# - src: dfarrell07.opendaylight
+
+# # Install a role from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+
+# # Install a role from a specific git branch
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: origin/master
+
+# # Install a role at a specific tag from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: 1.0.0
+
+# # Install a role at a specific commit from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: <commit hash>
+collections:
+  - name: community.general
+  - name: geerlingguy.mac
+    version: 4.1.0

@@ -2,7 +2,7 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "local.yml": "ansible",
-        // "tasks/*.yml": "ansible"
+        "tasks/*.yml": "ansible"
         // "*init.yml": "yaml",
     },
     "terminal.integrated.commandsToSkipShell": [
@@ -74,5 +74,5 @@
         }
     },
     "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
-    "ansible.python.interpreterPath": "/bin/python"
+    "ansible.python.interpreterPath": "/opt/homebrew/bin/python3"
 }

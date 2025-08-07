@@ -1,0 +1,16 @@
+---
+
+- name: Install languages with asdf
+  include_tasks: asdf.yml
+
+- name: Install global packages per asdf managed language
+  include_tasks: pkgs.yml
+  with_items: "{{ langs }}"
+  loop_control:
+    loop_var: lang
+
+- name: Install basher and bash packages
+  include_tasks: bash.yml
+
+- name: Setup Scala
+  include_tasks: scala.yml

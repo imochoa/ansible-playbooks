@@ -1,0 +1,192 @@
+---
+AnsiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
+HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
+# Loaded by default
+# default_username: debian
+timezone: Europe/Berin
+flatpak_remote: flathub
+flatpak_flathub_names:
+  - net.cozic.joplin_desktop
+  # - com.github.tchx84.Flatseal
+  - io.podman_desktop.PodmanDesktop
+  - org.bleachbit.BleachBit
+  - org.localsend.localsend_app
+  # - net.nokyan.Resources
+  - org.libreoffice.LibreOffice
+  - io.dbeaver.DBeaverCommunity
+  # - org.shotcut.Shotcut
+  # - com.obsproject.Studio
+  # - com.obsproject.Studio.Plugin.DroidCam
+packages_to_install:
+  - curl
+  - aptitude
+  - apt-utils
+  - ca-certificates
+  # Flatpak?
+  # - gnome-software-plugin-flatpak
+  # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  - libfuse2
+  - pipx
+  - python-is-python3
+  # pipx ensurepath
+  - ffmpeg
+  - libavcodec-extra
+  # CAD
+  - python3
+  - python3-dev
+  - python3-pip
+  - python3.12-venv
+  - python3-numpy
+  # podman
+  - uidmap # required for podman
+  # - uv # pipe monitor
+  # sudo podman image trust set --type accept docker.io
+  # # also podman
+  - podman
+  - podman-compose
+  - podman-remote
+  - buildah
+  # - sudo
+  # - python-apt
+  # - git-core
+  # - ufw
+  # - dnsutils
+  # - build-essential
+  # - acl
+  # - screen
+  # - bash-completion
+  # - ntp
+  # - jq
+  # - htop
+  # - psmisc
+  # - python-pip
+  # - python3-pip
+  # - vim
+  # - netcat
+  # - net-tools
+  # - nmap
+  # - lynx
+  # - wget
+  # - curl
+  # - gzip
+  # - rsync
+  # - logrotate
+  # # - logcheck
+  # - rkhunter
+  # - cryptsetup
+  # - python-glade2
+  # - dos2unix
+  # - mlocate
+  # - rclone
+  # - bc
+  # - zsh
+  # - hddtemp
+  # - lm-sensors
+  # - qemu-guest-agent
+  # - atop
+  # - sshfs
+  # - reptyr
+  # - lvm2
+  # - parted
+  # - rename
+  # - glances
+  # - gnupg
+  # - exim4
+  # required by ansible
+  - xz-utils
+snap_packages:
+  - 1password
+  - chromium
+  # - code # Do not install as snap, podman will not work in its terminal...
+  # TODO: use https://code.visualstudio.com/docs/setup/linux#_updates
+  # - firmware-updater
+  - slack
+# vscode_extensions:
+#   # - ms-toolsai.jupyter
+#   # - ms-vscode.cpptools
+#   # - ms-vscode.cmake-tools
+#   # - ms-vscode.makefile-tools
+#   # - ms-vscode.js-debug
+#   # - ms-vscode.node-debug2
+#   # - ms-vscode.node-debug
+#   # - ms-vscode.vscode-typescript-tslint-plugin
+#   # -   # talon
+#   - andreasarvidsson.andreas-talon
+#   - pokey.command-server
+#   - pokey.cursorless
+#   - pokey.parse-tree
+#   - pokey.talon
+#   - sleistner.vscode-fileutils
+#   - mrob95.vscode-talonscript
+#   # - # coding//
+#   - github.copilot
+#   - github.copilot-chat
+#   - ms-vscode-remote.remote-containers
+#   - ms-vscode-remote.remote-ssh
+#   - ms-vscode-remote.remote-ssh-edit
+#   - ms-vscode-remote.remote-wsl
+#   - ms-vscode-remote.vscode-remote-extensionpack
+#   - ms-vscode.remote-explorer
+#   - ms-vscode.remote-server
+#   - coolbear.systemd-unit-file
+#   # - # python
+#   - ms-python.debugpy
+#   - ms-python.python
+#   - ms-python.vscode-pylance
+#   # - # nix
+#   - jnoortheen.nix-ide
+#   - mkhl.direnv
+#   - arrterian.nix-env-selector
+#   # - # ansible
+#   - redhat.ansible
+#   # - # yaml
+#   - redhat.vscode-yaml
+#   # - # cpp
+#   - ms-vscode.cpptools
+#   - xaver.clang-format
+#   # - # arduino
+#   - platformio.platformio-ide
+#   # IDE as other programs
+#   - marp-team.marp-vscode
+#   - skellock.just
+# # andreasarvidsson.andreas-talon
+# # arrterian.nix-env-selector
+# # github.copilot
+# # github.copilot-chat
+# # jebbs.plantuml
+# # jnoortheen.nix-ide
+# # marp-team.marp-vscode
+# # mkhl.direnv
+# # mrob95.vscode-talonscript
+# # ms-azuretools.vscode-containers
+# # ms-azuretools.vscode-docker
+# # ms-python.debugpy
+# # ms-python.python
+# # ms-python.vscode-pylance
+# # ms-vscode-remote.remote-containers
+# # ms-vscode-remote.remote-ssh
+# # ms-vscode-remote.remote-ssh-edit
+# # ms-vscode-remote.remote-wsl
+# # ms-vscode-remote.vscode-remote-extensionpack
+# # ms-vscode.cpptools
+# # ms-vscode.remote-explorer
+# # ms-vscode.remote-server
+# # platformio.platformio-ide
+# # pokey.command-server
+# # pokey.cursorless
+# # pokey.parse-tree
+# # pokey.talon
+# # redhat.ansible
+# # redhat.vscode-yaml
+# # skellock.just
+# # sleistner.vscode-fileutils
+# # xaver.clang-format
+
+# joplin_plugins:
+#   - com.whatever.inline-tags
+#   - com.whatever.quick-links
+#   - joplin.plugin.alondmnt.history-panel
+#   - joplin.plugin.benji.favorites
+#   - joplin-plugin-conflict-resolution
+#   - joplin.plugin.note.tabs
+#   - net.rmusin.joplin-table-formatter

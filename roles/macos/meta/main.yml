@@ -1,0 +1,10 @@
+# ---
+# roles:
+#   - name: elliotweiser.osx-command-line-tools
+#   - name: geerlingguy.dotfiles
+#   - src: community.general
+
+# collections:
+# dependencies:
+#   - collections: geerlingguy.mac
+#     version: 4.1.0

@@ -1,0 +1,6 @@
+{
+    "key": "option+h",
+    // "Command+DownArrow"
+    "command": "workbench.action.tasks.runTask",
+    "args": "local",
+}

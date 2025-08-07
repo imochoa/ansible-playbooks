@@ -1,0 +1,98 @@
+---
+joplin_plugins:
+  - com.whatever.inline-tags
+  - com.whatever.quick-links
+  - joplin.plugin.alondmnt.history-panel
+  - joplin.plugin.benji.favorites
+  - joplin-plugin-conflict-resolution
+  - joplin.plugin.note.tabs
+  - net.rmusin.joplin-table-formatter
+
+vscode_extensions:
+  # - ms-toolsai.jupyter
+  # - ms-vscode.cpptools
+  # - ms-vscode.cmake-tools
+  # - ms-vscode.makefile-tools
+  # - ms-vscode.js-debug
+  # - ms-vscode.node-debug2
+  # - ms-vscode.node-debug
+  # - ms-vscode.vscode-typescript-tslint-plugin
+  # -   # talon
+  # Failing??
+  # - andreasarvidsson.andreas-talon
+  - pokey.command-server
+  - pokey.cursorless
+  - pokey.parse-tree
+  - pokey.talon
+  - sleistner.vscode-fileutils
+  - mrob95.vscode-talonscript
+  # - # coding//
+  - github.copilot
+  - github.copilot-chat
+  - ms-vscode-remote.remote-containers
+  - ms-vscode-remote.remote-ssh
+  - ms-vscode-remote.remote-ssh-edit
+  - ms-vscode-remote.remote-wsl
+  - ms-vscode-remote.vscode-remote-extensionpack
+  - ms-vscode.remote-explorer
+  - ms-vscode.remote-server
+  - coolbear.systemd-unit-file
+  # - # python
+  - ms-python.debugpy
+  - ms-python.python
+  - ms-python.vscode-pylance
+  # - # nix
+  - jnoortheen.nix-ide
+  - mkhl.direnv
+  - arrterian.nix-env-selector
+  # - # ansible
+  - redhat.ansible
+  # - # yaml
+  - redhat.vscode-yaml
+  # - # cpp
+  - ms-vscode.cpptools
+  - xaver.clang-format
+  # - # arduino
+  - platformio.platformio-ide
+  # IDE as other programs
+  - marp-team.marp-vscode
+  - skellock.just
+# andreasarvidsson.andreas-talon
+# arrterian.nix-env-selector
+# github.copilot
+# github.copilot-chat
+# jebbs.plantuml
+# jnoortheen.nix-ide
+# marp-team.marp-vscode
+# mkhl.direnv
+# mrob95.vscode-talonscript
+# ms-azuretools.vscode-containers
+# ms-azuretools.vscode-docker
+# ms-python.debugpy
+# ms-python.python
+# ms-python.vscode-pylance
+# ms-vscode-remote.remote-containers
+# ms-vscode-remote.remote-ssh
+# ms-vscode-remote.remote-ssh-edit
+# ms-vscode-remote.remote-wsl
+# ms-vscode-remote.vscode-remote-extensionpack
+# ms-vscode.cpptools
+# ms-vscode.remote-explorer
+# ms-vscode.remote-server
+# platformio.platformio-ide
+# pokey.command-server
+# pokey.cursorless
+# pokey.parse-tree
+# pokey.talon
+# redhat.ansible
+# redhat.vscode-yaml
+# skellock.just
+# sleistner.vscode-fileutils
+# xaver.clang-format
+
+homebrew_installed_packages:
+  # - ansible # Installed via Pip.
+  - gh
+  - ssh-copy-id
+  - pv
+  - wget

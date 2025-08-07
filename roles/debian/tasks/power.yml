@@ -1,0 +1,25 @@
+---
+# B/c Linux has high battery consumption by default
+# combine w/ tlp, tlp-rdw
+
+- name: Services
+  set_fact:
+    sys_services:
+      - "powertop"
+      - "tlp"
+
+- name: "Create {{ item }} systemd service file"
+  copy:
+    src: "etc/systemd/system/{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+    mode: 0744
+  become: true
+  with_items: "{{ sys_services }}"
+
+- name: "Start and enable {{ item }} service"
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  become: true
+  with_items: "{{ sys_services }}"

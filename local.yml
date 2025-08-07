@@ -2,18 +2,23 @@
 - name: Local setup playbook
   hosts: localhost
   connection: local
-  become: true
-
-  pre_tasks:
-    - name: Update repositories
-      ansible.builtin.apt:
-        update_cache: true
-        cache_valid_time: 3600
-      changed_when: false
-
-  # vars:
-  #   some_variable: "value"
-
+  vars_files:
+    - default.config.yml
+  vars:
+    user_name: "{{ lookup('env', 'USER') }}"
+    local_home: "{{ lookup('env', 'HOME') }}"
+  #   data_dir: "{{ local_home }}/.local/share"
+  #   anyenv_root: "{{ data_dir }}/anyenv"
+  #   cargo_home: "{{ data_dir }}/cargo"
+  #   rustup_home: "{{ data_dir }}/rustup"
+  #   os_family: "{{ ansible_os_family | lower }}"
+  # environment:
+  #   GEM_HOME: "{{ data_dir }}/gem"
+  #   RUST_HOME: "{{ rustup_home }}"
+  #   CARGO_HOME: "{{ cargo_home }}"
+  # was path guilty???
+  #   PATH: "{{ ansible_env.PATH }}:{{ anyenv_root }}/bin:/opt/homebrew/bin"
+  #   GOPATH: "{{ local_home }}/src/go"
   tasks:
 
     - name: Get facts about the host
@@ -23,29 +28,15 @@
 
     - name: Setting host facts using complex arguments
       ansible.builtin.set_fact:
-        username_on_the_host: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
-      # - name: Test
-      #   ansible.builtin.debug:
-      #     var: host_facts
-      #     var: username_on_the_host
+        ansible_distribution: "{{ host_facts['ansible_facts']['ansible_distribution'] }}"
 
-
-    # - name: Starting playbook
-    #   ansible.builtin.debug:
-    #     msg: task1
-    # - name: Set up ansible user
-    #   ansible.builtin.import_tasks:
-    #     file: tasks/users.yml
-    # - name: Set up cron job
-    #   ansible.builtin.import_tasks:
-    # #     file: tasks/cron.yml
-    - name: Install packages
-      ansible.builtin.import_tasks:
-        file: tasks/packages.yml
-    - name: Install nix
-      ansible.builtin.import_tasks:
-        file: tasks/nix.yml
-    - name: Install nix home-manager
-      ansible.builtin.import_tasks:
-        file: tasks/nix-home-manager.yml
-# podman...
+  roles:
+    - role: setup
+      # vars:
+      #   setup_dir: '/opt/a'
+      #   setup_app_port: 5000
+      # tags: typeA
+    - role: macos
+      when: ansible_facts['os_family']|lower == 'darwin'
+  #   - role: debian
+  #     when: ansible_facts['os_family']|lower == 'debian'

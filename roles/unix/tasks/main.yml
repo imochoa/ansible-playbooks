@@ -1,0 +1,47 @@
+---
+
+- name: Starting playbook
+  ansible.builtin.debug:
+    msg: unix baby
+
+- name: Joplin Plugins
+  tags:
+    - joplin
+  block:
+    - name: Check that joplin is installed
+      ansible.builtin.debug:
+        msg: to do make sure that Joplin is installed
+
+    - name: Ensure the joplin plugin directory exists
+      ansible.builtin.file:
+        path: "{{ local_home }}/.config/joplin-desktop/plugins"
+        state: directory
+        owner: "{{ user_name }}"
+        # group: "{{ user_name }}"
+        mode: '0751'
+
+    - name: Download joplin plugins
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
+        dest: "{{ local_home }}/.config/joplin-desktop/plugins/{{ item }}.jpl"
+        mode: '0644'
+      loop: "{{ joplin_plugins }}"
+
+
+
+- name: VSCode Plugins
+  tags:
+    - vscode
+  block:
+    - name: Check that is vscode installed
+      ansible.builtin.debug:
+        msg: to do make sure that is installed
+
+    # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+    - name: Install VSCode extensions
+      become: true
+      become_user: "{{ user_name }}"
+      ansible.builtin.command:
+        cmd: "code --install-extension '{{ item }}'"
+        # changed_when: "'{{ item }}' not in lookup('pipe', 'code --list-extensions')"
+      loop: "{{ vscode_extensions }}"

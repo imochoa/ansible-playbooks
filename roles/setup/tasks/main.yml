@@ -1,0 +1,12 @@
+---
+
+- name: Starting playbook
+  ansible.builtin.debug:
+    msg: rolling rolling
+
+- name: Setting host facts using complex arguments
+  ansible.builtin.set_fact:
+    setup_group_name: "{{ (ansible_os_family == 'Darwin') | ternary('staff', user_name) }}"
+    # host_facts is undefined
+    # setup_username_on_the_host: "{{ host_facts['ansible_facts']['ansible_env']['SUDO_USER'] }}"
+    # setup_ansible_distribution: "{{ host_facts['ansible_facts']['ansible_distribution'] }}"

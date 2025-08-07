@@ -4,9 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run local",
+            "label": "local",
             "type": "shell",
             "command": "just run-local",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                // "env": {
+                //     "ANSIBLE_CONFIG": "${workspaceFolder}/ansible.cfg"
+                // }
+            },
             "group": {
                 // "kind": "test",
                 "isDefault": true
@@ -14,8 +20,9 @@
             "presentation": {
                 "reveal": "always",
                 "echo": true,
-                "focus": false,
-                "panel": "shared"
+                // often need to write a password
+                "focus": true,
+                "panel": "dedicated"
             },
         }
     ]

@@ -1,6 +1,0 @@
-- name: "Install cron job (ansible-pull)"
-  ansible.builtin.cron:
-    user: ansible
-    name: "ansible provision"
-    minute: "*/10"
-    job: "/usr/bin/ansible-pull -o -U {{ ansiblePullRepo }} > /dev/null"

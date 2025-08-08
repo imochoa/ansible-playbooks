@@ -37,11 +37,56 @@
       ansible.builtin.debug:
         msg: to do make sure that is installed
 
-    # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+    - name: Get the extensions
+      ansible.builtin.command:
+        cmd: "code --list-extensions"
+      register: command_output
+      ignore_errors: yes
+
+    # - name: Check that is vscode installed
+    #   ansible.builtin.debug:
+    #     var: command_output.stdout
+    # - name: Filter and process a list based on command output
+    #   ansible.builtin.debug:
+    #     msg: "Filtered items: {{ filtered_list }}"
+    #   vars:
+    #     cmd_list: "{{ command_output.stdout | split() }}"
+    #     # filtered_list: "{{ original_list | reject('search', command_output.stdout) | list }}"
+    #     filtered_list: "{{ vscode_extensions | difference(cmd_list) }}"
+
     - name: Install VSCode extensions
-      become: true
-      become_user: "{{ user_name }}"
+      # become: true
+      # become_user: "{{ user_name }}"
       ansible.builtin.command:
         cmd: "code --install-extension '{{ item }}'"
-        # changed_when: "'{{ item }}' not in lookup('pipe', 'code --list-extensions')"
-      loop: "{{ vscode_extensions }}"
+      loop: "{{ filtered_list }}"
+      vars:
+        cmd_list: "{{ command_output.stdout | split() }}"
+        filtered_list: "{{ vscode_extensions | difference(cmd_list) }}"
+
+    # - name: Install extension if not present
+    #   ansible.builtin.command:
+    #     cmd: "code --install-extension '{{ item }}'"
+    #   loop: "{{ vscode_extensions }}"  # List of extensions, e.g., ['ms-python.python', 'vscodevim.vim']
+    # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+    # - name: Install VSCode extensions
+    #   become: true
+    #   become_user: "{{ user_name }}"
+    #   ansible.builtin.command:
+    #     cmd: "code --install-extension '{{ item }}'"
+    #     changed_when: "'{{ item }}' not in lookup('pipe', 'code --list-extensions')"
+    #   loop: "{{ vscode_extensions }}"
+
+    # - name: Check and install VS Code extensions
+    #   loop: "{{ vscode_extensions }}"  # List of extensions, e.g., ['ms-python.python', 'vscodevim.vim']
+    #   block:
+    #     - name: Check if extension is installed
+    #       ansible.builtin.shell: "code --list-extensions | grep -q {{ item }}"
+    #       register: extension_check
+    #       ignore_errors: yes  # Continue if command fails (e.g., if code is not installed)
+
+    #     - name: Install extension if not present
+    #       ansible.builtin.cmd: "code --install-extension '{{ item }}'"
+    #       when: extension_check.rc != 0  # rc != 0 means the extension was not found
+    #       args:
+    #         creates: "/path/to/vscode/extensions/{{ item }}"  # Optional: Specify a creates path if known

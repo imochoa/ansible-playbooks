@@ -20,10 +20,9 @@
   #   PATH: "{{ ansible_env.PATH }}:{{ anyenv_root }}/bin:/opt/homebrew/bin"
   #   GOPATH: "{{ local_home }}/src/go"
 
-  
   pre_tasks:
     - name: Include playbook configuration.
-      include_vars: "{{ item }}"
+      ansible.builtin.include_vars: "{{ item }}"
       with_fileglob:
         - "{{ playbook_dir }}/config.yml"
       tags: ['always']

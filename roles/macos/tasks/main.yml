@@ -12,6 +12,15 @@
     state: present
     # path: "{{ brew_prefix | dirname }}"
 
+- name: Install a Homebrew cask
+  community.general.homebrew_cask:
+    name: visual-studio-code
+    state: present
+
+
+- name: Upgrade Homebrew casks
+  community.general.homebrew_cask:
+    upgrade_all: true
 
 # https://github.com/geerlingguy/ansible-collection-mac
 

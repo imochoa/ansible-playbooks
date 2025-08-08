@@ -1,15 +1,12 @@
-# Ansible Pull tutorial
+# mac todos
+defaults write com.apple.finder AppleShowAllFiles true
+killall Finder
 
-![Ansible Logo](https://www.learnlinux.tv/wp-content/uploads/2020/12/ansible-e1607524003363.png)
-
-This repository was used for the Ansible Pull tutorial from the LearnLinux.TV YouTube channel.
-
-You can view the original video for this repository [here](https://youtu.be/sn1HQq_GFNE).
+https://iterm2.com/documentation-shell-integration.html
 
 # Bootstrap
 1. pull github repo? `sudo apt install -y git`
 2. Install ansible `sudo apt install -y ansible`
-
 
 sudo ansible-pull -U https://github.com/<org>/repo.git
 
@@ -27,13 +24,16 @@ https://www.youtube.com/watch?v=sn1HQq_GFNE
 --extra-vars "@some_file.Yaml"
 
 
-# ansible pull being killed?
-does not work with my git? sudo does not have nix-home manager
-
-
 # Semaphore UI
 
 # https://github.com/olivomarco/my-ansible-linux-setup
 
 # Ansible pull with private Github
 https://medium.com/planetarynetworks/ansible-pull-with-private-github-repository-d147fdf6f60b
+
+
+# Sources
+# https://www.talkingquickly.co.uk/2021/01/macos-setup-with-ansible/
+# https://github.com/geerlingguy/mac-dev-playbook
+# mac and ubuntu
+# https://github.com/mdzhang/laptop

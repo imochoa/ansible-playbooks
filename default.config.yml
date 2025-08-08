@@ -96,3 +96,40 @@ homebrew_installed_packages:
   - ssh-copy-id
   - pv
   - wget
+  - jq
+  - git
+  - atuin
+  - neovim
+  - openssh
+  - tree
+  - lazygit
+  - fzf
+  - just
+  - fd
+  - ripgrep
+  - bat
+  - eza
+  - zoxide
+
+homebrew_installed_casks:
+  - firefox
+  - chromium
+  - iterm2
+  - karabiner-elements
+  - macfuse
+  - vorta
+  - rectangle
+  - slack
+  - scroll-reverser
+  - podman-desktop
+  - joplin
+  - raycast
+  - visual-studio-code
+  - vlc
+  - syncthing
+  - keepassxc
+  - font-hack-nerd-font
+  - font-fira-code-nerd-font
+  - wacom-tablet
+  - 1password
+  - freeplane

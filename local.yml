@@ -46,5 +46,5 @@
       # tags: typeA
     - role: macos
       when: ansible_facts['os_family']|lower == 'darwin'
-  #   - role: debian
-  #     when: ansible_facts['os_family']|lower == 'debian'
+    - role: debian
+      when: ansible_facts['os_family']|lower == 'debian'

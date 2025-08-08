@@ -1,0 +1,4 @@
+---
+# Override the defaults here
+# vscode_extensions:
+#   - pokey.command-server

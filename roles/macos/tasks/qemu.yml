@@ -1,0 +1,43 @@
+# qemu
+# https://wiki.qemu.org/Hosts/Mac
+brew install qemu
+
+# quickemu
+# https://github.com/quickemu-project/quickemu/wiki/01-Installation
+brew install bash cdrtools coreutils jq python3 qemu usbutils samba sha3sum socat swtpm zsync
+git clone https://github.com/quickemu-project/quickemu
+cd quickemu
+
+# upgrade bash
+echo "$(brew --prefix)/bin/bash" | sudo tee -a /etc/shells;
+chsh -s "$(brew --prefix)/bin/bash"
+chsh -s "$(brew --prefix)/bin/bash"
+# replace shebang with
+# /opt/homebrew/bin/bash
+
+
+# windows 10
+./quickget --download windows 10
+
+# guickqui
+# https://github.com/quickemu-project/quickgui?tab=readme-ov-file
+git clone https://github.com/quickemu-project/quickgui.git
+cd quickgui
+flutter pub get
+flutter config --enable-macos-desktop
+flutter build macos --release
+# The compiled binary will be in build/linux/x64/release/bundle/quickgui. You can run it with:
+./build/linux/x64/release/bundle/quickgui
+
+
+# utm?
+brew install --cask utm
+
+
+
+# little snitch
+https://www.obdev.at/downloads/littlesnitch/LittleSnitch-6.2.3.dmg
+https://www.obdev.at/downloads/MicroSnitch/MicroSnitch-1.6.1.dmg
+
+# freecad
+https://github.com/FreeCAD/FreeCAD/releases/download/1.0.2/FreeCAD_1.0.2-conda-macOS-arm64-py311.dmg

@@ -1,6 +1,6 @@
 - name: Install packages
   ansible.builtin.apt:
-    name: "{{ packages_to_install }}"
+    name: "{{ debian.packages_to_install }}"
     state: present
 
 - name: Install Flatpak
@@ -17,7 +17,7 @@
 
 - name: Set up Flatpak
   community.general.flatpak:
-    name: "{{ flatpak_flathub_names }}"
+    name: "{{ debian.flatpak_flathub_names }}"
     remote: flathub
     state: present
 

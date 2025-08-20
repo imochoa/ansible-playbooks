@@ -2,6 +2,12 @@
 
 set -euco pipefail
 
+if [ "$(whoami)" == "root" ]; then
+   echo "This script must NOT be run as root." 1>&2
+   exit 1
+fi
+
+
 # [[[cog
 # import cog
 # import hashlib

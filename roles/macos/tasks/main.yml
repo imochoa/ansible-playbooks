@@ -6,6 +6,14 @@
 #   args:
 #     creates: /opt/homebrew/bin/brew
 
+# - name: Starting meowmoew
+#   ansible.builtin.debug:
+#     msg: "{{ macmac.username }}"
+
+- name: Set up OS X Command Line Tools
+  ansible.builtin.include_role:
+    name: elliotweiser.osx-command-line-tools
+
 - name: Ensure homebrew is updated
   community.general.homebrew:
     state: latest
@@ -15,16 +23,19 @@
 #   homebrew_tap:
 #     name: homebrew/bundle
 
+
 - name: Install brew formulae
   # become: true
   # become_user: "{{ user_name }}"
   community.general.homebrew:
-    name: "{{ homebrew_installed_packages }}"
+    name: "{{ macos.homebrew_installed_packages }}"
     state: present
+
+
 
 - name: Install a Homebrew cask
   community.general.homebrew_cask:
-    name: "{{ homebrew_installed_casks }}"
+    name: "{{ macos.homebrew_installed_casks }}"
     state: present
 
 - name: Upgrade all packages
@@ -32,12 +43,28 @@
     upgrade_all: true
   
 - name: Upgrade Homebrew casks
+  become: true
   community.general.homebrew_cask:
     upgrade_all: true
 
 - name: Cleanup
-  ansible.builtin.shell: 'brew cleanup'
+  ansible.builtin.command:
+    argv:
+      - brew
+      - cleanup
+    changed_when: true
 
+  
 - name: Include common tasks
   ansible.builtin.include_role:
     name: unix
+
+# xournal x86 install works, but not arm64
+# have to remove the quarantine before 
+# xattr -c /Applications/Xournal++.app
+#
+# https://ianthehenry.com/posts/how-to-learn-nix/nix-direnv/
+# nix direnv
+# mkdir -p ~/.config/direnv
+# echo 'source ~/.nix-profile/share/nix-direnv/direnvrc' > ~/.config/direnv/direnvrc
+# echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc

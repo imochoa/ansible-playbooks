@@ -2,6 +2,9 @@
 defaults write com.apple.finder AppleShowAllFiles true
 killall Finder
 
+homebrew is not the recommended way to install podman on mac
+https://podman.io/docs/installation#macos
+
 https://iterm2.com/documentation-shell-integration.html
 
 # Bootstrap

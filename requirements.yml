@@ -24,6 +24,9 @@
 # - name: opendaylight
 #   src: https://github.com/dfarrell07/ansible-opendaylight
 #   version: <commit hash>
+roles:
+  - src: elliotweiser.osx-command-line-tools
+
 collections:
   - name: community.general
   - name: geerlingguy.mac

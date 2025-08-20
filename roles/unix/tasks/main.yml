@@ -52,3 +52,6 @@
       vars:
         cmd_list: "{{ command_output.stdout | split() }}"
         filtered_list: "{{ vscode_extensions | difference(cmd_list) }}"
+
+- name: Set up SSH
+  ansible.builtin.import_tasks: ssh.yml

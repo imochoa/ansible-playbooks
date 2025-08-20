@@ -7,6 +7,18 @@ https://podman.io/docs/installation#macos
 
 https://iterm2.com/documentation-shell-integration.html
 
+
+# ansible vault
+
+ansible-vault encrypt --vault-password-file pass.txt file.txt
+
+# I'm not sure about this step, but I moved the encrypted file to the VM, where I want to use it.
+scp file.txt IP:~/
+
+ansible-playbook -i inventory.yaml --vault-password-file pass.txt playbook.yaml
+
+What should I write in the playbook to access it. 
+
 # Bootstrap
 1. pull github repo? `sudo apt install -y git`
 2. Install ansible `sudo apt install -y ansible`

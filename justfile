@@ -39,7 +39,7 @@ run-local:
   # tag filtering is only applied if you supply the --tags option
   # -vvv
   #  -i ./inventory 
-  $(which ansible-playbook) ./local.yml  --ask-become-pass --vault-password-file pass.txt # --tags "joplin,vscode"
+  $(which ansible-playbook) ./local.yml  --ask-become-pass --vault-password-file ./secrets/pass.txt # --tags "joplin,vscode"
 
 
 # ansible-test sanity --docker

@@ -2,5 +2,7 @@
 /\.ansible
 /result
 
-pass.txt
 \.DS_Store
+
+/secrets/*
+!/secrets/.keep

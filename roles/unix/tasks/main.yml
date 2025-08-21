@@ -7,6 +7,8 @@
 - name: Joplin Plugins
   tags:
     - joplin
+  vars:
+    joplin_plugin_dir: "{{ local_home }}/.config/joplin-desktop/plugins"
   block:
     - name: Check that joplin is installed
       ansible.builtin.debug:
@@ -14,18 +16,28 @@
 
     - name: Ensure the joplin plugin directory exists
       ansible.builtin.file:
-        path: "{{ local_home }}/.config/joplin-desktop/plugins"
+        path: "{{ joplin_plugin_dir }}"
         state: directory
         owner: "{{ user_name }}"
         # group: "{{ user_name }}"
         mode: '0751'
 
-    - name: Download joplin plugins
+    - name: Get the installed Joplin extensions
+      ansible.builtin.shell:
+        cmd: "ls {{ joplin_plugin_dir }} | rev | cut -d. -f2- | rev"
+      register: cmd_joplin_plugins
+      ignore_errors: yes
+
+    - name: Download missing Joplin plugins
       ansible.builtin.get_url:
         url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
-        dest: "{{ local_home }}/.config/joplin-desktop/plugins/{{ item }}.jpl"
+        dest: "{{ joplin_plugin_dir }}/{{ item }}.jpl"
         mode: '0644'
-      loop: "{{ joplin_plugins }}"
+      loop: "{{ filtered_joplin_plugins }}"
+      vars:
+        joplin_plugin_list: "{{ cmd_joplin_plugins.stdout | split() }}"
+        filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"
+
 
 
 
@@ -37,10 +49,10 @@
       ansible.builtin.debug:
         msg: to do make sure that is installed
 
-    - name: Get the extensions
+    - name: Get the installed VSCode extensions
       ansible.builtin.command:
         cmd: "code --list-extensions"
-      register: command_output
+      register: cmd_vscode_exts
       ignore_errors: yes
 
     - name: Install VSCode extensions
@@ -48,10 +60,10 @@
       # become_user: "{{ user_name }}"
       ansible.builtin.command:
         cmd: "code --install-extension '{{ item }}'"
-      loop: "{{ filtered_list }}"
+      loop: "{{ filtered_vscode_exts }}"
       vars:
-        cmd_list: "{{ command_output.stdout | split() }}"
-        filtered_list: "{{ vscode_extensions | difference(cmd_list) }}"
+        vscode_ext_list: "{{ cmd_vscode_exts.stdout | split() }}"
+        filtered_vscode_exts: "{{ vscode_extensions | difference(vscode_ext_list) }}"
 
 - name: Set up SSH
   ansible.builtin.import_tasks: ssh.yml

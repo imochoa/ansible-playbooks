@@ -102,6 +102,7 @@ macos:
     # - ansible # Installed via Pip.
     - gh
     - ssh-copy-id
+    - devcontainer
     - pv
     - wget
     - jq
@@ -121,6 +122,7 @@ macos:
     - direnv
     - ffmpeg
     - uv
+    # podman -> via podman-desktop
 
   homebrew_installed_casks:
     - firefox

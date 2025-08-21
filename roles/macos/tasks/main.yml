@@ -43,7 +43,6 @@
     upgrade_all: true
   
 - name: Upgrade Homebrew casks
-  become: true
   community.general.homebrew_cask:
     upgrade_all: true
 
@@ -52,9 +51,8 @@
     argv:
       - brew
       - cleanup
-    changed_when: true
+  changed_when: true
 
-  
 - name: Include common tasks
   ansible.builtin.include_role:
     name: unix

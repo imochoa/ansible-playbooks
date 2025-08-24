@@ -1,26 +1,13 @@
 #!/usr/bin/env bash
 
-set -euco pipefail
+set -euo pipefail
+# x will print password!
 
 if [ "$(whoami)" == "root" ]; then
    echo "This script must NOT be run as root." 1>&2
    exit 1
 fi
 
-
-# [[[cog
-# import cog
-# import hashlib
-# with open(cog.inFile) as f: txt = f.read()
-# idx=txt.find('\n# [[[end')
-# txt=txt[idx:]
-# txt=txt[txt.find('\n', 1):]
-# h = hashlib.new('sha256')
-# h.update(txt[idx:].encode())
-# cog.outl(f"HASH='{h.hexdigest()}'")
-# ]]]
-# HASH='031edd7d41651593c5fe5c006fa5752b37fddff7bc4e843aa6af0c950f4b9406' # (generated)
-# # [[[end]]]
 
 # sudo apt install -y ansible git
 # sudo ansible-pull -v -U https://github.com/imochoa/ansible-playbooks.git
@@ -30,58 +17,45 @@ fi
 
 # sudo apt -y install entr ansible git
 
-# # while true; do
-# #   ls -d src/*.py | entr -d ./setup.py
-# # done
 
 # sudo ansible-playbook ./local.yml
 # sudo ansible-pull -v -U https://github.com/imochoa/ansible-playbooks.git
 
 
 
-# if [ ! -d ansible-babun-bootstrap ]
-#  then
-#   git clone https://github.com/tiangolo/ansible-babun-bootstrap.git
-# else
-#   cd ansible-babun-bootstrap
-#   git pull
-#   cd ..
-# fi
-
 # source ansible-babun-bootstrap/ansible-babun-bootstrap.sh
 
 OS=$(uname | tr '[:upper:]' '[:lower:]')
-
 printf "Detected OS: %s\n" "${OS}";
+
+
+# works on both Linux & MacOS
+#  bootstrapdir=$(mktemp -d 2>/dev/null || mktemp -d -t ' bootstrapdir')
+
+if [[ -f "./bootstrapdir.txt" ]]; then
+   bootstrapdir=$(cat "./bootstrapdir.txt");
+else
+   bootstrapdir=$(mktemp -d --tmpdir bootstrap.XXXXX)
+  printf  $bootstrapdir > "./bootstrapdir.txt"
+fi
+
+echo ${bootstrapdir};
+
 
 if [ "${OS}" = "darwin" ]; then
   echo "Running on macOS"
 
-#!/bin/bash
-# script to bootstrap setting up a macos with ansible
-
-# # NB: be sure to use system python3
+# NB: be sure to use system python3
 # /usr/bin/pip3 install ansible --user
 # export PATH="$HOME/Library/Python/3.9/bin:$PATH"
-# installdir="/tmp/laptop-$RANDOM"
-# mkdir $installdir
+#  bootstrapdir="/tmp/laptop-$RANDOM"
+# mkdir  $bootstrapdir
 
-# git clone https://github.com/mdzhang/laptop.git $installdir
-# if [ ! -d $installdir ]; then
-#     echo "failed to find laptop."
-#     echo "git clone failed"
-#     exit 1
-# else
-#     cd $installdir
-#     make run
-# fi
-# echo "cleaning up..."
-# rm -Rfv /tmp/$installdir
-# echo "done."
-# exit 0
 
 elif [  "${OS}" = "linux" ]; then
-  echo "Running on Linux"
+  echo "Running on Linux";
+  sudo apt-get -y install ansible;
+#   python-setuptools python3-setuptools python3 python3-wheel python3-dev python3-pip build-essential libpq-dev libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev libffi-dev libssl-dev git make
 
 
 #!/bin/bash
@@ -107,22 +81,50 @@ elif [  "${OS}" = "linux" ]; then
 # sudo apt-get -y install \
 #   python-setuptools python3-setuptools python3 python3-wheel python3-dev python3-pip build-essential libpq-dev libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev libffi-dev libssl-dev git make
 # pip3 install ansible --user
-# installdir="/tmp/laptop-$RANDOM"
-# mkdir $installdir
-# git clone https://github.com/mdzhang/laptop.git $installdir
-# if [ ! -d $installdir ]; then
+#  bootstrapdir="/tmp/laptop-$RANDOM"
+# mkdir  $bootstrapdir
+# git clone https://github.com/mdzhang/laptop.git  $bootstrapdir
+# if [ ! -d  $bootstrapdir ]; then
 #     echo "failed to find laptop."
 #     echo "git cloned failed"
 #     exit 1
 # else
-#     cd $installdir
+#     cd  $bootstrapdir
 #     export PATH=$PATH:~/.local/bin
 #     make run
 # fi
 
-# echo "cleaning up..."
-# rm -Rfv /tmp/$installdir
-# echo "done."
-# exit 0
 
 fi
+
+
+if [ ! -d "${bootstrapdir}/repo" ]; then
+    # --depth 1
+    git clone --branch master -- https://github.com/imochoa/ansible-playbooks.git  "${bootstrapdir}/repo"
+    # sudo ansible-pull -U https://github.com/imochoa/ansible-playbooks.git -C master
+fi
+
+pushd "${bootstrapdir}/repo"
+trap 'popd' RETURN
+
+vault_pass_file="./secrets/pass.txt";
+
+if [ ! -f $vault_pass_file ]; then
+    read -s -p "Enter password: " vault_pass
+    printf "%s" "${vault_pass}" > "${vault_pass_file}"
+else
+    vault_pass=$(cat "$vault_pass_file");
+fi
+
+printf "going\n";
+# printf "$vault_pass";
+
+# -vvv
+ansible-playbook ./local.yml --ask-become-pass --vault-password-file ./secrets/pass.txt # --tags "joplin,vscode"
+
+# export PATH=$PATH:~/.local/bin
+
+# echo "cleaning up..."
+# rm -Rfv /tmp/ $bootstrapdir
+# echo "done."
+exit 0

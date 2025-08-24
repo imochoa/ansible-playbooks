@@ -248,9 +248,10 @@ debian:
     # required by ansible
     - xz-utils
   snap_packages:
-    - 1password
-    - chromium
+    # - 1password
+    # - chromium
     # - code # Do not install as snap, podman will not work in its terminal...
     # TODO: use https://code.visualstudio.com/docs/setup/linux#_updates
     # - firmware-updater
-    - slack
+    - fwupd
+    # - slack

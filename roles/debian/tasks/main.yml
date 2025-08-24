@@ -3,10 +3,15 @@
 # https://github.com/OlGe404/olge404.unix
 
 - name: Update repositories
+  become: true
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
   changed_when: false
+
+- name: Package install!
+  ansible.builtin.include_tasks:
+    file: ./packages.yml
 
 - name: Include common tasks
   ansible.builtin.include_role:
@@ -15,11 +20,6 @@
 # - name: Update all packages to the latest version
 #   apt:
 #     upgrade: dist
-#   become: true
-
-# - name: apt-get update
-#   apt:
-#     update_cache: true
 #   become: true
 
 # - name: Add keys w/ url and id

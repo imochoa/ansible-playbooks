@@ -69,3 +69,6 @@
 
 - name: Set up SSH
   ansible.builtin.import_tasks: ssh.yml
+
+- name: Set up git
+  ansible.builtin.import_tasks: git.yml

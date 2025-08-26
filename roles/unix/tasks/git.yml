@@ -6,12 +6,9 @@
     value: "imochoa"
     scope: global
     state: present
-  become_user: "{{ username_on_the_host }}"
-
 - name: Set Git user.email
   community.general.git_config:
     name: user.email
     value: "18612100+imochoa@users.noreply.github.com"
     scope: global
     state: present
-  become_user: "{{ username_on_the_host }}"

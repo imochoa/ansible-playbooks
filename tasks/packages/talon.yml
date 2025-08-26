@@ -1,0 +1,21 @@
+# TALON
+# setup for cursorless
+# mkdir -p /home/imochoa/.config/Code/User/
+#   󰝴  amy   touch /home/imochoa/.config/Code/User/settings.json
+# file to add
+
+# {
+#     "cursorless.hatEnablement.shapes": {
+#         "bolt": true,
+#         "curve": true,
+#         "fox": true,
+#         "frame": true,
+#         "play": true,
+#         "wing": true,
+#         "hole": true,
+#         "ex": true,
+#         "crosshairs": true,
+#         "eye": true
+#     }
+# }
+

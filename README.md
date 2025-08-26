@@ -67,3 +67,12 @@ https://medium.com/planetarynetworks/ansible-pull-with-private-github-repository
 # https://github.com/geerlingguy/mac-dev-playbook
 # mac and ubuntu
 # https://github.com/mdzhang/laptop
+
+
+```bash
+sudo apt install -y curl
+
+# TODO check shebang?
+curl -sL "https://raw.githubusercontent.com/imochoa/ansible-playbooks/refs/heads/master/bootstrap.sh" | /bin/bash
+
+```

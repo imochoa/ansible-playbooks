@@ -29,7 +29,23 @@
   ansible.builtin.copy:
     src: "id_jcyk.pub"
     dest: "{{ local_home }}/.ssh/id_jcyk.pub"
-    mode: "0644"
+    mode: 0644
+
+- name: Set up multiple authorized keys
+  ansible.posix.authorized_key:
+    user: "{{user_name}}"
+    state: present
+    key: "{{ lookup('file', local_home + '/.ssh/id_jcyk.pub') }}"
+
+# auto-get known hosts, less secure
+# ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+- name: Another way to call known_hosts
+  ansible.builtin.known_hosts:
+    name: github.com
+    key: github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+    path: "{{ local_home }}/.ssh/known_hosts"
+    state: present
 # - name: Start SSH agent and set environment variables
 #   ansible.builtin.shell: |
 #     eval "$(ssh-agent -s)"

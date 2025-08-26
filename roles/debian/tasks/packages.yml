@@ -1,16 +1,19 @@
 ---
 - name: Install packages
+  become: true
   ansible.builtin.apt:
     name: "{{ debian.packages_to_install }}"
     state: present
 
 - name: Install Flatpak
+  become: true
   ansible.builtin.apt:
     name: flatpak
     state: present
 #     sudo apt install gnome-software-plugin-flatpak
 
 - name: Add Flathub repository
+  become: true
   community.general.flatpak_remote:
     name: flathub
     state: present
@@ -24,17 +27,17 @@
 
 # Snap packages
 - name: Ensure snapd is installed
+  become: true
   ansible.builtin.apt:
     name: snapd
     state: present
+
 - name: Install Snap packages
+  become: true
   community.general.snap:
-    name:
-      - 1password
-      - chromium
-      # - firmware-updater
-      # brave, slack, spotify, zoom-client
+    name: "{{debian.snap_packages}}"
     state: present
+
 - name: Check if my_package is installed
   ansible.builtin.command: dpkg-query -W code
   register: my_package_check_deb
@@ -48,6 +51,7 @@
 #     when: my_package_check_deb.rc == 1
 
 - name: Install
+  become: true
   ansible.builtin.apt:
     deb: "https://vscode.download.prss.microsoft.com/dbazure/download/stable/7adae6a56e34cb64d08899664b814cf620465925/code_1.102.1-1752598717_amd64.deb"
   # sudo: true

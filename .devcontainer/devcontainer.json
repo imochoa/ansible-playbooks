@@ -1,0 +1,38 @@
+{
+    "name": "Ansible devContainer",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // "runArgs": [
+    //     "--userns=keep-id"
+    // ],
+    // "remoteEnv": {
+    //     "PODMAN_USERNS": "keep-id"
+    // },
+    // "remoteUser": "vscode",
+    // "containerUser": "vscode",
+    // "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,relabel=shared",
+    // "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                // "terminal.integrated.defaultProfile.linux": "bash",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length=120"
+                ],
+                "editor.formatOnSave": true,
+                "ansible.python.interpreter": "/usr/local/bin/python"
+            },
+            "extensions": [
+                "ms-python.python",
+                "vscoss.vscode-ansible",
+                "redhat.ansible",
+                // "ms-vscode-remote.remote-containers",
+                "esbenp.prettier-vscode"
+            ]
+        },
+    }
+}

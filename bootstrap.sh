@@ -27,6 +27,19 @@ echo ${bootstrapdir};
 if [ "${OS}" = "darwin" ]; then
   echo "Running on macOS"
 
+  # curl is available by default
+  # isntall brew
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # set up path
+      echo >> /Users/imochoa/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/imochoa/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+  # reload?
+
+  # isntall ansible
+  brew install ansible
+
 # NB: be sure to use system python3
 # /usr/bin/pip3 install ansible --user
 # export PATH="$HOME/Library/Python/3.9/bin:$PATH"
@@ -49,8 +62,11 @@ fi
 pushd "${bootstrapdir}/repo"
 trap 'popd' RETURN
 
+ansible-galaxy install -r "./requirements.txt"
+
 vault_pass_file="./secrets/pass.txt";
 
+# TODO: did not work on MacOS?
 if [ ! -f $vault_pass_file ]; then
     read -s -p "Enter password: " vault_pass
     printf "%s" "${vault_pass}" > "${vault_pass_file}"

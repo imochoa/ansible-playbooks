@@ -97,6 +97,9 @@ HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
 # default_username: debian
 timezone: Europe/Berin
 
+unix:
+  install_nix: false
+
 macos:
   homebrew_installed_packages:
     # - ansible # Installed via Pip.

@@ -70,3 +70,40 @@
 
 - name: Set up git
   ansible.builtin.import_tasks: git.yml
+
+
+
+- name: VSCode Plugins
+  when: "{{ unix.install_nix }}" 
+  block:
+
+    # - name: Check if my_package is installed
+    #   ansible.builtin.shell: which nix
+    #   # become: true
+    #   # become_user: "{{ username_on_the_host }}"
+    #   register: nix_check
+    #   failed_when: nix_check.rc > 1
+    #   changed_when: nix_check.rc == 1
+
+    - name: Get stats of the FS object
+      ansible.builtin.stat:
+        path: /nix/var/nix/profiles/default/bin/nix
+      register: nix_check
+
+# - name: Starting playbook
+#   ansible.builtin.debug:
+#     msg: { { nix_check } }
+
+- name: Download determinate nix installer
+  ansible.builtin.get_url:
+    url: https://install.determinate.systems/nix
+    dest: /tmp/determinate-nix.sh
+    checksum: sha256:4d22cbd666243d70353c8a6cee4ddaa8b329ca4ca45b710f9343b7f89ecb6297
+  when: not nix_check.stat.exists
+
+# https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+# TODO skip installation!
+# - name: Install nix
+#   # become: true
+#   ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --no-confirm --explain
+#   when: not nix_check.stat.exists

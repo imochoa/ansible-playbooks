@@ -36,6 +36,10 @@
     state: present
     key: "{{ lookup('file', local_home + '/.ssh/id_jcyk.pub') }}"
 
+# for macos call
+# /usr/bin/ssh-add --apple-use-keychain <private>
+# tty for password
+
 # auto-get known hosts, less secure
 # ssh-keyscan github.com >> ~/.ssh/known_hosts
 
@@ -45,6 +49,34 @@
     key: github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
     path: "{{ local_home }}/.ssh/known_hosts"
     state: present
+
+# - name: Ensure .ssh config exists
+#   ansible.builtin.file:
+#     path: "{{ local_home }}/.ssh/config"
+#     owner: "{{ user_name }}"
+#     state: "touch"
+#     # group: "{{ user_name }}"
+#     mode: "0600"
+
+- name: ensure file exists
+  copy:
+    content: ""
+    dest: "{{ local_home }}/.ssh/config"
+    force: false
+    # group: sys
+    owner: "{{ user_name }}"
+    mode: 0600
+
+# TODO: use cog?
+- name: Insert/Upkey a new line
+  ansible.builtin.blockinfile:
+    path: "{{ local_home }}/.ssh/config"
+    append_newline: true
+    prepend_newline: true
+    block: |
+      Host *
+          UseKeychain yes
+
 
 # - name: Start SSH agent and set environment variables
 #   ansible.builtin.shell: |

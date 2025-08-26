@@ -1,5 +1,4 @@
 ---
-
 - name: Starting playbook
   ansible.builtin.debug:
     msg: rolling rolling

@@ -1,3 +1,4 @@
+---
 - name: Install packages
   ansible.builtin.apt:
     name: "{{ debian.packages_to_install }}"
@@ -35,7 +36,7 @@
       # brave, slack, spotify, zoom-client
     state: present
 - name: Check if my_package is installed
-  command: dpkg-query -W code
+  ansible.builtin.command: dpkg-query -W code
   register: my_package_check_deb
   failed_when: my_package_check_deb.rc > 1
   changed_when: my_package_check_deb.rc == 1
@@ -90,7 +91,7 @@
 # 2. Copy to `~/.config/joplin-desktop/plugins`
 # 	> This path might be different on your device - check at the top of the Options page in the Configuration screen)
 - name: Ensure remote .ssh directory exists
-  file:
+  ansible.builtin.file:
     path: /home/{{ username_on_the_host }}/.config/joplin-desktop/plugins
     state: directory
     owner: "{{ username_on_the_host }}"

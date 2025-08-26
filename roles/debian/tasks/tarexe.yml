@@ -1,43 +1,43 @@
 ---
 # Grab a tarball, download it, uncompress it, pull out an executable and add to path
 
-- set_fact:
+- ansible.builtin.set_fact:
     bin_path: ~/.local/bin
 
 - name: Ensure directory exists
-  file:
+  ansible.builtin.file:
     path: "{{ dir }}"
     state: directory
     owner: "{{ user_name }}"
     group: "{{ group_name }}"
-    recurse: yes
+    recurse: true
   loop_control:
     loop_var: dir
   with_items:
     - "{{ bin_path }}"
 
 - name: Grab and unpack tarball
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ item.url }}"
     dest: /tmp
-    remote_src: yes
-    list_files: yes
+    remote_src: true
+    list_files: true
   register: archive_contents
 
 - name: Copy tar.gz output to bin
-  copy:
+  ansible.builtin.copy:
     src: "/tmp/{{ archive_contents.files[0] }}{{ item.name }}"
     dest: "{{ bin_path }}/{{ item.name }}"
     owner: "{{ user_name }}"
     group: "{{ group_name }}"
-    mode: 0755
+    mode: "0755"
   when: item.url.endswith("tar.gz")
 
 - name: Copy tgz output to bin
-  copy:
+  ansible.builtin.copy:
     src: "/tmp/{{ item.name }}"
     dest: "{{ bin_path }}/{{ item.name }}"
     owner: "{{ user_name }}"
     group: "{{ group_name }}"
-    mode: 0755
+    mode: "0755"
   when: item.url.endswith("tgz")

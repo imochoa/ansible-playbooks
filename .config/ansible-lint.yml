@@ -1,0 +1,31 @@
+# .config/ansible-lint.yml
+
+# List of rules to skip (by rule ID or tag)
+# skip_list:
+#   - '208'    # Example: '208' disables 'file permissions' rule
+#   - 'experimental'  # Skip all experimental rules
+
+# Paths to exclude from linting
+exclude_paths:
+  - "roles/external/"
+  - "tests/"
+
+# Set verbosity (0 = minimal, 1 = normal, 2 = verbose)
+verbosity: 1
+
+# List of custom rules directories (if any)
+# rulesdir:
+#   - ./custom_rules/
+
+# Enable or disable colored output
+# colored: true
+
+# autofix
+write_list: ["all"]
+# Set the number of parallel processes (default: auto)
+# parseable: false
+
+# List of tags to only run (if specified)
+# tags:
+#   - 'formatting'
+#   - 'syntax'

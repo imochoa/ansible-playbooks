@@ -19,13 +19,17 @@ vscode_extensions:
   # - ms-vscode.vscode-typescript-tslint-plugin
   # -   # talon
   # Failing??
-  # - andreasarvidsson.andreas-talon
-  - pokey.command-server
+  - andreasarvidsson.andreas-talon
   - pokey.cursorless
+  # todo: look into:
   - pokey.parse-tree
   - pokey.talon
-  - sleistner.vscode-fileutils
-  - mrob95.vscode-talonscript
+  # includes:
+  # - pokey.command-server
+  # - sleistner.vscode-fileutils
+  # necessary?
+  # - mrob95.vscode-talonscript
+  - usernamehw.errorlens
   # - # coding//
   - github.copilot
   - github.copilot-chat
@@ -36,6 +40,7 @@ vscode_extensions:
   - ms-vscode-remote.vscode-remote-extensionpack
   - ms-vscode.remote-explorer
   - ms-vscode.remote-server
+  # systemd
   - coolbear.systemd-unit-file
   # - # python
   - ms-python.debugpy
@@ -45,19 +50,18 @@ vscode_extensions:
   - jnoortheen.nix-ide
   - mkhl.direnv
   - arrterian.nix-env-selector
-  # - # ansible
+  # # ansible
   - redhat.ansible
-  # - # yaml
+  # # yaml
   - redhat.vscode-yaml
-  # - # cpp
+  # # cpp
   - ms-vscode.cpptools
   - xaver.clang-format
-  # - # arduino
+  # # arduino
   - platformio.platformio-ide
   # IDE as other programs
   - marp-team.marp-vscode
   - skellock.just
-# andreasarvidsson.andreas-talon
 # arrterian.nix-env-selector
 # github.copilot
 # github.copilot-chat

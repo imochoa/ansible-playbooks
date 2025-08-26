@@ -3,21 +3,21 @@
 # combine w/ tlp, tlp-rdw
 
 - name: Services
-  set_fact:
+  ansible.builtin.set_fact:
     sys_services:
       - "powertop"
       - "tlp"
 
 - name: "Create {{ item }} systemd service file"
-  copy:
+  ansible.builtin.copy:
     src: "etc/systemd/system/{{ item }}.service"
     dest: "/etc/systemd/system/{{ item }}.service"
-    mode: 0744
+    mode: "0744"
   become: true
   with_items: "{{ sys_services }}"
 
 - name: "Start and enable {{ item }} service"
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: started
     enabled: true

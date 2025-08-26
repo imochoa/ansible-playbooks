@@ -98,7 +98,6 @@
 #     autoremove: true
 #   become: true
 
-
 # - name: Add flatpak hub
 #   shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 #   become: true

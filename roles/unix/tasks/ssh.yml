@@ -1,3 +1,4 @@
+---
 # - name: Add a host in the configuration
 #   community.general.ssh_config:
 #     user: akasurde
@@ -22,7 +23,7 @@
   ansible.builtin.copy:
     src: "id_jcyk"
     dest: "{{ local_home }}/.ssh/id_jcyk"
-    mode: 0600
+    mode: "0600"
 
 - name: "Decrypt public key"
   ansible.builtin.copy:
@@ -76,7 +77,6 @@
     block: |
       Host *
           UseKeychain yes
-
 
 # - name: Start SSH agent and set environment variables
 #   ansible.builtin.shell: |

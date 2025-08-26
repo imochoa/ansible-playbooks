@@ -1,8 +1,13 @@
 ---
-
-- name: Starting playbook
+- name: Only macos
+  when: is_macos
   ansible.builtin.debug:
-    msg: unix baby
+    msg: to do macos
+
+- name: Pls no
+  when: is_debian
+  ansible.builtin.debug:
+    msg: do not print this
 
 - name: Joplin Plugins
   tags:
@@ -20,26 +25,23 @@
         state: directory
         owner: "{{ user_name }}"
         # group: "{{ user_name }}"
-        mode: '0751'
+        mode: "0751"
 
     - name: Get the installed Joplin extensions
       ansible.builtin.shell:
         cmd: "ls {{ joplin_plugin_dir }} | rev | cut -d. -f2- | rev"
       register: cmd_joplin_plugins
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Download missing Joplin plugins
       ansible.builtin.get_url:
         url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
         dest: "{{ joplin_plugin_dir }}/{{ item }}.jpl"
-        mode: '0644'
+        mode: "0644"
       loop: "{{ filtered_joplin_plugins }}"
       vars:
         joplin_plugin_list: "{{ cmd_joplin_plugins.stdout | split() }}"
         filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"
-
-
-
 
 - name: VSCode Plugins
   tags:
@@ -53,7 +55,7 @@
       ansible.builtin.command:
         cmd: "code --list-extensions"
       register: cmd_vscode_exts
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Install VSCode extensions
       # become: true

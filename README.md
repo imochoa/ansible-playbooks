@@ -17,15 +17,31 @@ export LANG=en_US.UTF-8
 
 # ansible vault
 
-ansible-vault encrypt --vault-password-file pass.txt file.txt
+## Files
 
-# I'm not sure about this step, but I moved the encrypted file to the VM, where I want to use it.
+```
+# encrypts in-place!
+ansible-vault encrypt --vault-password-file ./secrets/pass.txt file.txt
 
-scp file.txt IP:~/
 
-ansible-playbook -i inventory.yaml --vault-password-file pass.txt playbook.yaml
+# feed the pass.txt when running
+ansible-playbook -i inventory.yaml --vault-password-file ./secrets/pass.txt playbook.yaml
+```
 
-What should I write in the playbook to access it.
+## Vars
+
+https://docs.ansible.com/ansible/2.8/user_guide/playbooks_vault.html#encrypt-string
+https://docs.ansible.com/ansible/2.8/cli/ansible-vault.html#ansible-vault-encrypt-string
+
+```
+# encrypts in-place!
+
+# with --output, all other vars are deleted...
+ansible-vault encrypt_string --vault-password-file ./secrets/pass.txt --name testvar --output ./roles/unix/vars/main.yml ./roles/unix/vars/main.yml
+
+# feed the pass.txt when running
+ansible-playbook -i inventory.yaml --vault-password-file ./secrets/pass.txt playbook.yaml
+```
 
 # Bootstrap
 

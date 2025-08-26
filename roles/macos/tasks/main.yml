@@ -1,5 +1,4 @@
 ---
-
 # # Triggers 'xcode-select --install'
 # - name: Install homebrew
 #   shell: 'yes | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
@@ -23,15 +22,12 @@
 #   homebrew_tap:
 #     name: homebrew/bundle
 
-
 - name: Install brew formulae
   # become: true
   # become_user: "{{ user_name }}"
   community.general.homebrew:
     name: "{{ macos.homebrew_installed_packages }}"
     state: present
-
-
 
 - name: Install a Homebrew cask
   community.general.homebrew_cask:
@@ -41,7 +37,7 @@
 - name: Upgrade all packages
   community.general.homebrew:
     upgrade_all: true
-  
+
 - name: Upgrade Homebrew casks
   community.general.homebrew_cask:
     upgrade_all: true
@@ -58,7 +54,7 @@
     name: unix
 
 # xournal x86 install works, but not arm64
-# have to remove the quarantine before 
+# have to remove the quarantine before
 # xattr -c /Applications/Xournal++.app
 #
 # https://ianthehenry.com/posts/how-to-learn-nix/nix-direnv/

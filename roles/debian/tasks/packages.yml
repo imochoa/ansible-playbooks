@@ -1,3 +1,4 @@
+---
 - name: Install packages
   become: true
   ansible.builtin.apt:
@@ -38,7 +39,7 @@
     state: present
 
 - name: Check if my_package is installed
-  command: dpkg-query -W code
+  ansible.builtin.command: dpkg-query -W code
   register: my_package_check_deb
   failed_when: my_package_check_deb.rc > 1
   changed_when: my_package_check_deb.rc == 1
@@ -93,6 +94,21 @@
 # 1. get plugin `.jpl` from [the repo](https://github.com/joplin/plugins/tree/master/plugins)
 # 2. Copy to `~/.config/joplin-desktop/plugins`
 # 	> This path might be different on your device - check at the top of the Options page in the Configuration screen)
+- name: Ensure remote .ssh directory exists
+  ansible.builtin.file:
+    path: /home/{{ username_on_the_host }}/.config/joplin-desktop/plugins
+    state: directory
+    owner: "{{ username_on_the_host }}"
+    group: "{{ username_on_the_host }}"
+- name: Download joplin plugins
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
+    dest: "/home/{{ username_on_the_host }}/.config/joplin-desktop/plugins/{{ item }}.jpl"
+  loop: "{{ joplin_plugins }}"
+# - name: Download joplin plugin file and with check (sha256)
+#   become: true
+#   become_user: "{{ username_on_the_host }}"
+#   ansible.builtin.get_url:
 #     url: "https://raw.github.com/joplin/plugins/master/plugins/{{item}}/plugin.jpl"
 #     dest: "{{ username_on_the_host }}/.config/joplin-desktop/plugins/"
 #     # checksum: sha256:b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c

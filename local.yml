@@ -7,11 +7,12 @@
   vars:
     user_name: "{{ lookup('env', 'USER') }}"
     local_home: "{{ lookup('env', 'HOME') }}"
-  #   data_dir: "{{ local_home }}/.local/share"
-  #   anyenv_root: "{{ data_dir }}/anyenv"
-  #   cargo_home: "{{ data_dir }}/cargo"
-  #   rustup_home: "{{ data_dir }}/rustup"
-  #   os_family: "{{ ansible_os_family | lower }}"
+    #   data_dir: "{{ local_home }}/.local/share"
+    #   anyenv_root: "{{ data_dir }}/anyenv"
+    #   cargo_home: "{{ data_dir }}/cargo"
+    #   rustup_home: "{{ data_dir }}/rustup"
+    # ansible_facts['os_family']
+    os_family: "{{ ansible_os_family | lower }}"
   # environment:
   #   GEM_HOME: "{{ data_dir }}/gem"
   #   RUST_HOME: "{{ rustup_home }}"
@@ -25,9 +26,7 @@
       ansible.builtin.include_vars: "{{ item }}"
       with_fileglob:
         - "{{ playbook_dir }}/config.yml"
-      tags: ['always']
-
-  tasks:
+      tags: ["always"]
 
     - name: Get facts about the host
       ansible.builtin.setup:
@@ -37,14 +36,41 @@
     - name: Setting host facts using complex arguments
       ansible.builtin.set_fact:
         ansible_distribution: "{{ host_facts['ansible_facts']['ansible_distribution'] }}"
+        is_macos: "{{ os_family == 'darwin' }}"
+        is_debian: "{{ os_family == 'debian' }}"
+        cacheable: false
+
+    # - name: Setting host facts using complex
+    #   ansible.builtin.set_fact:
+    #     is_macos: "{{ ansible_facts['os_family'] | lower == 'darwin' }}"
+    #     is_debian: "{{ ansible_facts['os_family'] | lower == 'debian' }}"
+    #     cacheable: true
+
+    # - name: Setting host facts using complex
+    #   ansible.builtin.set_fact:
+    #     is_debian: "{{ ansible_facts['os_family'] | lower == 'debian' }}"
+    #     cacheable: true
+
+    - name: Print detected OS
+      ansible.builtin.debug:
+        msg: "is_macos = {{ is_macos }}"
+
+  tasks:
+    # - name: Print all available facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts
+
+    - name: Done!
+      ansible.builtin.debug:
+        msg: "Finished the playbook!"
 
   roles:
     - role: setup
-      # vars:
-      #   setup_dir: '/opt/a'
-      #   setup_app_port: 5000
-      # tags: typeA
+    # vars:
+    #   setup_dir: '/opt/a'
+    #   setup_app_port: 5000
+    # tags: typeA
     - role: macos
-      when: ansible_facts['os_family']|lower == 'darwin'
+      when: is_macos
     - role: debian
-      when: ansible_facts['os_family']|lower == 'debian'
+      when: is_debian

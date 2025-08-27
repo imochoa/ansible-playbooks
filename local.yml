@@ -3,23 +3,15 @@
   hosts: localhost
   connection: local
   vars_files:
-    - default.config.yml
+    # Overriden by config.yml
+    - "{{ playbook_dir }}/default.config.yml"
   vars:
     user_name: "{{ lookup('env', 'USER') }}"
     local_home: "{{ lookup('env', 'HOME') }}"
     #   data_dir: "{{ local_home }}/.local/share"
-    #   anyenv_root: "{{ data_dir }}/anyenv"
-    #   cargo_home: "{{ data_dir }}/cargo"
-    #   rustup_home: "{{ data_dir }}/rustup"
-    # ansible_facts['os_family']
     os_family: "{{ ansible_os_family | lower }}"
   # environment:
   #   GEM_HOME: "{{ data_dir }}/gem"
-  #   RUST_HOME: "{{ rustup_home }}"
-  #   CARGO_HOME: "{{ cargo_home }}"
-  # was path guilty???
-  #   PATH: "{{ ansible_env.PATH }}:{{ anyenv_root }}/bin:/opt/homebrew/bin"
-  #   GOPATH: "{{ local_home }}/src/go"
 
   pre_tasks:
     - name: Include playbook configuration.
@@ -39,17 +31,6 @@
         is_macos: "{{ os_family == 'darwin' }}"
         is_debian: "{{ os_family == 'debian' }}"
         cacheable: false
-
-    # - name: Setting host facts using complex
-    #   ansible.builtin.set_fact:
-    #     is_macos: "{{ ansible_facts['os_family'] | lower == 'darwin' }}"
-    #     is_debian: "{{ ansible_facts['os_family'] | lower == 'debian' }}"
-    #     cacheable: true
-
-    # - name: Setting host facts using complex
-    #   ansible.builtin.set_fact:
-    #     is_debian: "{{ ansible_facts['os_family'] | lower == 'debian' }}"
-    #     cacheable: true
 
     - name: Print detected OS
       ansible.builtin.debug:
@@ -74,3 +55,5 @@
       when: is_macos
     - role: debian
       when: is_debian
+    - role: unix
+      when: is_debian or is_macos

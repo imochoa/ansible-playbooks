@@ -67,8 +67,8 @@ ansible-galaxy install -r "./requirements.txt"
 vault_pass_file="./secrets/pass.txt";
 
 # TODO: did not work on MacOS?
-if [ ! -f $vault_pass_file ]; then
-    read -s -p "Enter password: " vault_pass
+if [ ! -f "${vault_pass_file}" ]; then
+    read -s -p "Enter password:\n" vault_pass
     printf "%s" "${vault_pass}" > "${vault_pass_file}"
 else
     vault_pass=$(cat "$vault_pass_file");

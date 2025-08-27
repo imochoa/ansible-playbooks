@@ -29,6 +29,7 @@
     name: "{{ macos.homebrew_installed_packages }}"
     state: present
 
+# requires a lot of password entry...
 - name: Install a Homebrew cask
   community.general.homebrew_cask:
     name: "{{ macos.homebrew_installed_casks }}"
@@ -49,12 +50,14 @@
       - cleanup
   changed_when: true
 
-- name: Include common tasks
-  ansible.builtin.include_role:
-    name: unix
+# - name: Include common tasks
+#   ansible.builtin.include_role:
+#     name: unix
 
 # xournal x86 install works, but not arm64
-# have to remove the quarantine before
+# https://github.com/xournalpp/xournalpp/releases/download/v1.2.7/xournalpp-1.2.7-macOS-X64.dmg
+# 1. Install it
+# 2. have to remove the quarantine before
 # xattr -c /Applications/Xournal++.app
 #
 # https://ianthehenry.com/posts/how-to-learn-nix/nix-direnv/

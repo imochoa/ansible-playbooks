@@ -29,11 +29,11 @@
   ansible.builtin.copy:
     src: "id_jcyk.pub"
     dest: "{{ local_home }}/.ssh/id_jcyk.pub"
-    mode: 0644
+    mode: "0644"
 
 - name: Set up multiple authorized keys
   ansible.posix.authorized_key:
-    user: "{{user_name}}"
+    user: "{{ user_name }}"
     state: present
     key: "{{ lookup('file', local_home + '/.ssh/id_jcyk.pub') }}"
 
@@ -59,14 +59,14 @@
 #     # group: "{{ user_name }}"
 #     mode: "0600"
 
-- name: ensure file exists
-  copy:
+- name: Ensure file exists
+  ansible.builtin.copy:
     content: ""
     dest: "{{ local_home }}/.ssh/config"
     force: false
     # group: sys
     owner: "{{ user_name }}"
-    mode: 0600
+    mode: "0600"
 
 # TODO: use cog?
 - name: Insert/Upkey a new line

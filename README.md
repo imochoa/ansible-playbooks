@@ -1,5 +1,7 @@
 # mac todos
 
+# for talon...
+
 defaults write com.apple.finder AppleShowAllFiles true
 killall Finder
 
@@ -43,19 +45,6 @@ ansible-vault encrypt_string --vault-password-file ./secrets/pass.txt --name tes
 ansible-playbook -i inventory.yaml --vault-password-file ./secrets/pass.txt playbook.yaml
 ```
 
-# Bootstrap
-
-1. pull github repo? `sudo apt install -y git`
-2. Install ansible `sudo apt install -y ansible`
-
-sudo ansible-pull -U https://github.com/<org>/repo.git
-
-ansible-pull -v -U https://github.com/imochoa/ansible-playbooks.git --ask-become-pass
-
-Continue:
-https://www.youtube.com/watch?v=sn1HQq_GFNE
-22:45
-
 # Set values before calling?
 
 -e, --extra-vars
@@ -64,16 +53,6 @@ https://www.youtube.com/watch?v=sn1HQq_GFNE
 
 --extra-vars "@some_file.json"
 --extra-vars "@some_file.Yaml"
-
-# Semaphore UI
-
-# https://github.com/olivomarco/my-ansible-linux-setup
-
-# Ansible pull with private Github
-
-https://medium.com/planetarynetworks/ansible-pull-with-private-github-repository-d147fdf6f60b
-
-# Sources
 
 # https://www.talkingquickly.co.uk/2021/01/macos-setup-with-ansible/
 

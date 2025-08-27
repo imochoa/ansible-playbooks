@@ -1,3 +1,4 @@
+---
 - name: Create ansible user
   ansible.builtin.user:
     name: ansible
@@ -18,6 +19,6 @@
     regexp: "^%ansible"
     line: "%ansible ALL=(ALL) NOPASSWD: ALL"
 - name: "Add authorized keys"
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ item }}"
-    key: "{{ lookup('file', 'files/'+ item + '.key.pub') }}"
+    key: "{{ lookup('file', 'files/' + item + '.key.pub') }}"

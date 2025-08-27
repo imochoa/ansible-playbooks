@@ -3,28 +3,31 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    // "runArgs": [
-    //     "--userns=keep-id"
-    // ],
-    // "remoteEnv": {
-    //     "PODMAN_USERNS": "keep-id"
-    // },
-    // "remoteUser": "vscode",
-    // "containerUser": "vscode",
-    // "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,relabel=shared",
-    // "workspaceFolder": "/workspace",
+    "postCreateCommand": "ansible-galaxy install -r ./requirements.yml",
     "customizations": {
         "vscode": {
             "settings": {
-                // "terminal.integrated.defaultProfile.linux": "bash",
-                "python.linting.enabled": true,
-                "python.linting.pylintEnabled": true,
-                "python.formatting.provider": "black",
-                "python.formatting.blackArgs": [
-                    "--line-length=120"
-                ],
                 "editor.formatOnSave": true,
-                "ansible.python.interpreter": "/usr/local/bin/python"
+                "files.associations": {
+                    "local.yml": "ansible",
+                    "tasks/*.yml": "ansible",
+                    // "*init.yml": "yaml",
+                    "*plays.yml": "ansible",
+                    "*init.yml": "yaml"
+                    // "/*config.yml": "yaml"
+                },
+                // "[jsonc]": {
+                //     "editor.defaultFormatter": "vscode.json-language-features"
+                // },
+                "[ansible]": {
+                    "editor.defaultFormatter": "redhat.ansible"
+                },
+                // redhat.vscode-yaml plugin
+                "yaml.format.enable": true,
+                "ansible.python.interpreter": "/usr/local/bin/python",
+                "ansible.validation.lint.arguments": "--fix",
+                "ansible.lightspeed.enabled": false,
+                "redhat.telemetry.enabled": false
             },
             "extensions": [
                 "ms-python.python",
@@ -33,6 +36,6 @@
                 // "ms-vscode-remote.remote-containers",
                 "esbenp.prettier-vscode"
             ]
-        },
+        }
     }
 }

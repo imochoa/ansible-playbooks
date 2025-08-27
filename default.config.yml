@@ -51,7 +51,7 @@ vscode_extensions:
   - mkhl.direnv
   - arrterian.nix-env-selector
   # # ansible
-  - redhat.ansible
+  # - redhat.ansible
   # # yaml
   - redhat.vscode-yaml
   # # cpp
@@ -62,37 +62,6 @@ vscode_extensions:
   # IDE as other programs
   - marp-team.marp-vscode
   - skellock.just
-# arrterian.nix-env-selector
-# github.copilot
-# github.copilot-chat
-# jebbs.plantuml
-# jnoortheen.nix-ide
-# marp-team.marp-vscode
-# mkhl.direnv
-# mrob95.vscode-talonscript
-# ms-azuretools.vscode-containers
-# ms-azuretools.vscode-docker
-# ms-python.debugpy
-# ms-python.python
-# ms-python.vscode-pylance
-# ms-vscode-remote.remote-containers
-# ms-vscode-remote.remote-ssh
-# ms-vscode-remote.remote-ssh-edit
-# ms-vscode-remote.remote-wsl
-# ms-vscode-remote.vscode-remote-extensionpack
-# ms-vscode.cpptools
-# ms-vscode.remote-explorer
-# ms-vscode.remote-server
-# platformio.platformio-ide
-# pokey.command-server
-# pokey.cursorless
-# pokey.parse-tree
-# pokey.talon
-# redhat.ansible
-# redhat.vscode-yaml
-# skellock.just
-# sleistner.vscode-fileutils
-# xaver.clang-format
 
 # Linux stuff from previous config
 AnsiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
@@ -103,12 +72,14 @@ timezone: Europe/Berin
 
 unix:
   install_nix: false
+  install_vscode: false
+  install_joplin: false
 
 macos:
   homebrew_installed_packages:
     # - ansible # Installed via Pip.
     - gh
-    - ssh-copy-id
+    # - ssh-copy-id
     - devcontainer
     - pv
     - wget
@@ -116,7 +87,6 @@ macos:
     - git
     - atuin
     - neovim
-    - openssh
     - tree
     - lazygit
     - fzf
@@ -158,10 +128,15 @@ macos:
     - onedrive
     - key-codes
     - wezterm
-    - microsoft-outlook
+    # - microsoft-outlook
+    - microsoft-excel
+    - microsoft-word
+    - microsoft-powerpoint
     # do I want to keep these?
     - shottr
     - time-out
+    - freecad
+    - zotero
 
 debian:
   flatpak_remote: flathub

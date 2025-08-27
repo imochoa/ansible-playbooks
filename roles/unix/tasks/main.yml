@@ -1,17 +1,16 @@
 ---
-- name: Only macos
-  when: is_macos
-  ansible.builtin.debug:
-    msg: to do macos
+# - name: Only macos
+#   when: is_macos
+#   ansible.builtin.debug:
+#     msg: to do macos
 
-- name: Pls no
-  when: is_debian
-  ansible.builtin.debug:
-    msg: do not print this
+# - name: Pls no
+#   when: is_debian
+#   ansible.builtin.debug:
+#     msg: do not print this
 
 - name: Joplin Plugins
-  tags:
-    - joplin
+  when: unix.install_joplin
   vars:
     joplin_plugin_dir: "{{ local_home }}/.config/joplin-desktop/plugins"
   block:
@@ -44,20 +43,24 @@
         filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"
 
 - name: VSCode Plugins
-  tags:
-    - vscode
+  when: unix.install_vscode
   block:
-    - name: Check that is vscode installed
-      ansible.builtin.debug:
-        msg: to do make sure that is installed
+    - name: Check if vscode is installed
+      ansible.builtin.command: which code
+      register: vscode_check
+      ignore_errors: true
+      check_mode: false
+      changed_when: false
 
     - name: Get the installed VSCode extensions
+      when: vscode_check.rc == 0
       ansible.builtin.command:
         cmd: "code --list-extensions"
       register: cmd_vscode_exts
       ignore_errors: true
 
     - name: Install VSCode extensions
+      when: vscode_check.rc == 0
       # become: true
       # become_user: "{{ user_name }}"
       ansible.builtin.command:
@@ -73,39 +76,53 @@
 - name: Set up git
   ansible.builtin.import_tasks: git.yml
 
-
-
-- name: VSCode Plugins
-  when: "{{ unix.install_nix }}" 
+- name: ˜Nix"
+  when: unix.install_nix
   block:
-
-    # - name: Check if my_package is installed
-    #   ansible.builtin.shell: which nix
-    #   # become: true
-    #   # become_user: "{{ username_on_the_host }}"
-    #   register: nix_check
-    #   failed_when: nix_check.rc > 1
-    #   changed_when: nix_check.rc == 1
-
-    - name: Get stats of the FS object
-      ansible.builtin.stat:
-        path: /nix/var/nix/profiles/default/bin/nix
+    - name: Check if nix is installed
+      ansible.builtin.command: which nix
       register: nix_check
+      ignore_errors: true
+      check_mode: false
+      changed_when: false
 
-# - name: Starting playbook
-#   ansible.builtin.debug:
-#     msg: { { nix_check } }
+    - name: Download determinate nix installer
+      when: nix_check.rc != 0
+      ansible.builtin.get_url:
+        url: https://install.determinate.systems/nix
+        dest: /tmp/determinate-nix.sh
+        mode: "0555"
+        checksum: sha256:4d22cbd666243d70353c8a6cee4ddaa8b329ca4ca45b710f9343b7f89ecb6297
 
-- name: Download determinate nix installer
-  ansible.builtin.get_url:
-    url: https://install.determinate.systems/nix
-    dest: /tmp/determinate-nix.sh
-    checksum: sha256:4d22cbd666243d70353c8a6cee4ddaa8b329ca4ca45b710f9343b7f89ecb6297
-  when: not nix_check.stat.exists
+    - name: Install nix
+      when: nix_check.rc != 0
+      # become: true
+      ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --no-confirm --explain
 
-# https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
-# TODO skip installation!
-# - name: Install nix
-#   # become: true
-#   ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --no-confirm --explain
-#   when: not nix_check.stat.exists
+# xournal
+# - name: Get gogs latest tag
+#   github_release:
+#     user: gogs
+#     repo: gogs
+#     action: latest_release
+#   register: gogs_latest
+
+# - name: Grab gogs latest binaries
+#   unarchive:
+#     src: "https://github.com/gogs/gogs/releases/download/{{ gogs_latest['tag'] }}/gogs_{{ gogs_latest['tag'] | regex_replace('^v','') }}_linux_amd64.zip"
+#     dest: /usr/local/bin
+#     remote_src: true
+
+# https://talonvoice.com/update/qyO6k0Y0jHOeI94q51eTKV/Talon-115-0.4.0-950-bd10.dmg
+
+# todo only if ~/.talon/user exists, and is empty!!!
+# - name: Git checkout
+#   ansible.builtin.git:
+#     repo: "git@github.com:imochoa/talon-user-dir.git"
+#     dest: "{{ user_name }}/.talon/user"
+#     version: "master"
+#  git clone git@github.com:imochoa/talon-user-dir.git ~/.talon/user
+# git submodule update --init --recursive
+
+# wacom Download
+# https://support.wacom.asia/tw/content/macos-driver-6338-3

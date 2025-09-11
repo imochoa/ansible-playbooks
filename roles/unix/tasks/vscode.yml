@@ -1,0 +1,87 @@
+---
+- name: VSCode Plugins
+  block:
+    - name: Check if vscode is installed
+      ansible.builtin.command: which code
+      register: vscode_check
+      ignore_errors: true
+      check_mode: false
+      changed_when: false
+
+    - name: Get the installed VSCode extensions
+      when: vscode_check.rc == 0
+      ansible.builtin.command:
+        cmd: "code --list-extensions"
+      register: cmd_vscode_exts
+      ignore_errors: true
+
+    - name: Install VSCode extensions
+      when: vscode_check.rc == 0
+      ansible.builtin.command:
+        cmd: "code --install-extension '{{ item }}'"
+      loop: "{{ filtered_vscode_exts }}"
+      vars:
+        # TODO: if empty, might need something like: "{{ users | union(extra_users | default ([])) }}"
+        vscode_ext_list: "{{ cmd_vscode_exts.stdout | split() }}"
+        filtered_vscode_exts: "{{ unix.vscode.extensions | difference(vscode_ext_list) }}"
+
+- name: VSCode User Settings
+  vars:
+    os_dependent_path: "{{ (is_macos) | ternary('Library/Application Support', '.config') }}"
+    vscode_user_settings_json: "{{ local_home }}/{{ os_dependent_path }}/Code/User/settings.json"
+  block:
+    # - name: Check if file exists
+    #   stat:
+    #     path: "{{ vscode_user_settings_json }}"
+    #   register: settings_json
+
+    # - name: add content if empty
+    #   when: not settings_json.stat.exists
+    #   # ansible.builtin.debug:
+    #   #   msg: "{{ settings_json.stat.exists }}"
+
+    - name: Add content if empty
+      ansible.builtin.copy:
+        dest: "{{ vscode_user_settings_json }}"
+        content: "{}"
+        mode: "0644"
+        # don't overwrite existing file
+        force: false
+
+    # TODO make sure file exists, add empty json if not
+    - name: Load var from file
+      ansible.builtin.slurp:
+        src: "{{ vscode_user_settings_json }}"
+      register: imported_vscode_settings
+
+    # - debug:
+    #     msg: "{{ imported_vscode_settings.content|b64decode|from_json }}"
+    - name: Append more key/values and write to file
+      vars:
+        settings_as_dict: "{{ imported_vscode_settings.content | b64decode | from_json | default({}) }}"
+        new_settings: "{{ unix.vscode.user_settings | from_yaml | default({}) }}"
+        # "editor.dropIntoEditor.preferences": []
+        # dev:
+        #   containers:
+        #     dockerPath: podman
+        #     dockerComposePath: podman-compose
+        # git:
+        #   autofetch: true
+        #   confirmSync: false
+        #   suggestSmartCommit: false
+        # github:
+        #   copilot:
+        #     nextEditSuggestions:
+        #       enabled: true
+        # "[jsonc]":
+        #   "editor.defaultFormatter": "vscode.json-language-features"
+        # ansible:
+        #   "lightspeed.enabled": false
+        #   "validation.lint.arguments": "--fix"
+        # --- DONE ---
+        merged_settings: "{{ settings_as_dict | combine(new_settings, recursive=True) }}"
+      ansible.builtin.copy:
+        content: "{{ merged_settings | to_nice_json }}"
+        dest: "{{ vscode_user_settings_json }}"
+      # debug:
+      #   var: merged_settings

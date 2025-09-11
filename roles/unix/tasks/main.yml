@@ -9,66 +9,13 @@
 #   ansible.builtin.debug:
 #     msg: do not print this
 
-- name: Joplin Plugins
+- name: Set up Joplin
   when: unix.install_joplin
-  vars:
-    joplin_plugin_dir: "{{ local_home }}/.config/joplin-desktop/plugins"
-  block:
-    - name: Check that joplin is installed
-      ansible.builtin.debug:
-        msg: to do make sure that Joplin is installed
+  ansible.builtin.import_tasks: joplin.yml
 
-    - name: Ensure the joplin plugin directory exists
-      ansible.builtin.file:
-        path: "{{ joplin_plugin_dir }}"
-        state: directory
-        owner: "{{ user_name }}"
-        # group: "{{ user_name }}"
-        mode: "0751"
-
-    - name: Get the installed Joplin extensions
-      ansible.builtin.shell:
-        cmd: "ls {{ joplin_plugin_dir }} | rev | cut -d. -f2- | rev"
-      register: cmd_joplin_plugins
-      ignore_errors: true
-
-    - name: Download missing Joplin plugins
-      ansible.builtin.get_url:
-        url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
-        dest: "{{ joplin_plugin_dir }}/{{ item }}.jpl"
-        mode: "0644"
-      loop: "{{ filtered_joplin_plugins }}"
-      vars:
-        joplin_plugin_list: "{{ cmd_joplin_plugins.stdout | split() }}"
-        filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"
-
-- name: VSCode Plugins
+- name: Set up VSCode
   when: unix.install_vscode
-  block:
-    - name: Check if vscode is installed
-      ansible.builtin.command: which code
-      register: vscode_check
-      ignore_errors: true
-      check_mode: false
-      changed_when: false
-
-    - name: Get the installed VSCode extensions
-      when: vscode_check.rc == 0
-      ansible.builtin.command:
-        cmd: "code --list-extensions"
-      register: cmd_vscode_exts
-      ignore_errors: true
-
-    - name: Install VSCode extensions
-      when: vscode_check.rc == 0
-      # become: true
-      # become_user: "{{ user_name }}"
-      ansible.builtin.command:
-        cmd: "code --install-extension '{{ item }}'"
-      loop: "{{ filtered_vscode_exts }}"
-      vars:
-        vscode_ext_list: "{{ cmd_vscode_exts.stdout | split() }}"
-        filtered_vscode_exts: "{{ vscode_extensions | difference(vscode_ext_list) }}"
+  ansible.builtin.import_tasks: vscode.yml
 
 - name: Set up SSH
   ansible.builtin.import_tasks: ssh.yml
@@ -76,28 +23,9 @@
 - name: Set up git
   ansible.builtin.import_tasks: git.yml
 
-- name: ˜Nix"
+- name: Set up nix
   when: unix.install_nix
-  block:
-    - name: Check if nix is installed
-      ansible.builtin.command: which nix
-      register: nix_check
-      ignore_errors: true
-      check_mode: false
-      changed_when: false
-
-    - name: Download determinate nix installer
-      when: nix_check.rc != 0
-      ansible.builtin.get_url:
-        url: https://install.determinate.systems/nix
-        dest: /tmp/determinate-nix.sh
-        mode: "0555"
-        checksum: sha256:4d22cbd666243d70353c8a6cee4ddaa8b329ca4ca45b710f9343b7f89ecb6297
-
-    - name: Install nix
-      when: nix_check.rc != 0
-      # become: true
-      ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --no-confirm --explain
+  ansible.builtin.import_tasks: nix.yml
 
 # xournal
 # - name: Get gogs latest tag

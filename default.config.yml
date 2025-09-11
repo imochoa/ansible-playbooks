@@ -8,61 +8,6 @@ joplin_plugins:
   - joplin.plugin.note.tabs
   - net.rmusin.joplin-table-formatter
 
-vscode_extensions:
-  # - ms-toolsai.jupyter
-  # - ms-vscode.cpptools
-  # - ms-vscode.cmake-tools
-  # - ms-vscode.makefile-tools
-  # - ms-vscode.js-debug
-  # - ms-vscode.node-debug2
-  # - ms-vscode.node-debug
-  # - ms-vscode.vscode-typescript-tslint-plugin
-  # -   # talon
-  # Failing??
-  - andreasarvidsson.andreas-talon
-  - pokey.cursorless
-  # todo: look into:
-  - pokey.parse-tree
-  - pokey.talon
-  # includes:
-  # - pokey.command-server
-  # - sleistner.vscode-fileutils
-  # necessary?
-  # - mrob95.vscode-talonscript
-  - usernamehw.errorlens
-  # - # coding//
-  - github.copilot
-  - github.copilot-chat
-  - ms-vscode-remote.remote-containers
-  - ms-vscode-remote.remote-ssh
-  - ms-vscode-remote.remote-ssh-edit
-  - ms-vscode-remote.remote-wsl
-  - ms-vscode-remote.vscode-remote-extensionpack
-  - ms-vscode.remote-explorer
-  - ms-vscode.remote-server
-  # systemd
-  - coolbear.systemd-unit-file
-  # - # python
-  - ms-python.debugpy
-  - ms-python.python
-  - ms-python.vscode-pylance
-  # - # nix
-  - jnoortheen.nix-ide
-  - mkhl.direnv
-  - arrterian.nix-env-selector
-  # # ansible
-  # - redhat.ansible
-  # # yaml
-  - redhat.vscode-yaml
-  # # cpp
-  - ms-vscode.cpptools
-  - xaver.clang-format
-  # # arduino
-  - platformio.platformio-ide
-  # IDE as other programs
-  - marp-team.marp-vscode
-  - skellock.just
-
 # Linux stuff from previous config
 AnsiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
 HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
@@ -72,8 +17,69 @@ timezone: Europe/Berin
 
 unix:
   install_nix: false
-  install_vscode: false
-  install_joplin: false
+  install_vscode: true
+  install_joplin: true
+  vscode:
+    extensions:
+      # talon
+      - andreasarvidsson.andreas-talon
+      - pokey.cursorless
+      # todo: look into:
+      - pokey.parse-tree
+      - pokey.talon
+      # necessary?
+      # - mrob95.vscode-talonscript
+      - usernamehw.errorlens
+      # - # coding//
+      - github.copilot
+      - github.copilot-chat
+      - ms-vscode-remote.remote-containers
+      - ms-vscode-remote.remote-ssh
+      - ms-vscode-remote.remote-ssh-edit
+      - ms-vscode-remote.remote-wsl
+      - ms-vscode-remote.vscode-remote-extensionpack
+      - ms-vscode.remote-explorer
+      - ms-vscode.remote-server
+      # systemd
+      - coolbear.systemd-unit-file
+      # - # python
+      - ms-python.debugpy
+      - ms-python.python
+      - ms-python.vscode-pylance
+      # - # nix
+      - jnoortheen.nix-ide
+      # - mkhl.direnv
+      - arrterian.nix-env-selector
+      # # ansible
+      # - redhat.ansible
+      # # yaml
+      - redhat.vscode-yaml
+      # # cpp
+      - ms-vscode.cpptools
+      - xaver.clang-format
+      # # arduino
+      - platformio.platformio-ide
+      # IDE as other programs
+      - marp-team.marp-vscode
+      - skellock.just
+    user_settings:
+      dev:
+        containers:
+          dockerPath: podman
+          dockerComposePath: podman-compose
+      git:
+        autofetch: true
+        confirmSync: false
+        suggestSmartCommit: false
+      github:
+        copilot:
+          nextEditSuggestions:
+            enabled: true
+      "[jsonc]":
+        "editor.defaultFormatter": "vscode.json-language-features"
+      ansible:
+        "lightspeed.enabled": false
+        "validation.lint.arguments": "--fix"
 
 macos:
   homebrew_installed_packages:
@@ -99,6 +105,7 @@ macos:
     - direnv
     - ffmpeg
     - uv
+    - watchexec
     # podman -> via podman-desktop
 
   homebrew_installed_casks:
@@ -128,13 +135,18 @@ macos:
     - onedrive
     - key-codes
     - wezterm
+    - hoppscotch
+    - homerow
     # - microsoft-outlook
     - microsoft-excel
     - microsoft-word
     - microsoft-powerpoint
     # do I want to keep these?
     - shottr
-    - time-out
+    # - time-out # annoying warnings...
+    # - lookaway # paid service...
+    - breaktimer
+    - keyboard-maestro
     - freecad
     - zotero
 

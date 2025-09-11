@@ -1,0 +1,32 @@
+---
+- name: Joplin Plugins
+  vars:
+    joplin_plugin_dir: "{{ local_home }}/.config/joplin-desktop/plugins"
+  block:
+    - name: Check that joplin is installed
+      ansible.builtin.debug:
+        msg: to do make sure that Joplin is installed
+
+    - name: Ensure the joplin plugin directory exists
+      ansible.builtin.file:
+        path: "{{ joplin_plugin_dir }}"
+        state: directory
+        owner: "{{ user_name }}"
+        # group: "{{ user_name }}"
+        mode: "0751"
+
+    - name: Get the installed Joplin extensions
+      ansible.builtin.shell:
+        cmd: "ls {{ joplin_plugin_dir }} | rev | cut -d. -f2- | rev"
+      register: cmd_joplin_plugins
+      ignore_errors: true
+
+    - name: Download missing Joplin plugins
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/joplin/plugins/master/plugins/{{ item }}/plugin.jpl"
+        dest: "{{ joplin_plugin_dir }}/{{ item }}.jpl"
+        mode: "0644"
+      loop: "{{ filtered_joplin_plugins }}"
+      vars:
+        joplin_plugin_list: "{{ cmd_joplin_plugins.stdout | split() }}"
+        filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"

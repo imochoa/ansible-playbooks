@@ -1,4 +1,64 @@
 ---
+- name: ˜Nix"
+  block:
+    - name: Check if nix is installed
+      ansible.builtin.command: which nix
+      register: nix_check
+      ignore_errors: true
+      check_mode: false
+      changed_when: false
+
+    - name: Download determinate nix installer
+      when: nix_check.rc != 0
+      ansible.builtin.get_url:
+        url: https://install.determinate.systems/nix
+        dest: /tmp/determinate-nix.sh
+        mode: "0555"
+        checksum: sha256:4d22cbd666243d70353c8a6cee4ddaa8b329ca4ca45b710f9343b7f89ecb6297
+
+    - name: Install nix
+      when: nix_check.rc != 0
+      # become: true
+      ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --no-confirm --explain
+# # Clone to ~/.config/home-manager
+
+# # - name: Check if my_package is installed
+# #   ansible.builtin.shell: which nix
+# #   # become: true
+# #   # become_user: "{{ username_on_the_host }}"
+# #   register: nix_check
+# #   failed_when: nix_check.rc > 1
+# #   changed_when: nix_check.rc == 1
+
+# - name: Get stats of the FS object
+#   ansible.builtin.stat:
+#     path: /nix/var/nix/profiles/default/bin/nix
+#   register: nix_check
+
+# # - name: Starting playbook
+# #   ansible.builtin.debug:
+# #     msg: { { nix_check } }
+
+# - name: Download determinate nix installer
+#   ansible.builtin.get_url:
+#     url: https://install.determinate.systems/nix
+#     dest: /tmp/determinate-nix.sh
+#     checksum: sha256:46555f126c17dfe27bb33fedd4dc9b246abf55c147b04a8e929b65e16cd730a6
+#   when: not nix_check.stat.exists
+
+# # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+# - name: Install nix
+#   become: true
+#   ansible.builtin.shell: cat /tmp/determinate-nix.sh | sh -s -- install --determinate --no-confirm --explain
+#   when: not nix_check.stat.exists
+# # # Home manager...
+# # # TODO issues running in an env with nix available?
+# # # https://chaosmail.github.io/programming/2015/03/04/install-deb-packages-in-ansible/
+# # - name: Switch home manager
+# #   become: true
+# #   become_user: "{{ username_on_the_host }}"
+# #   ansible.builtin.shell: /nix/var/nix/profiles/default/bin/nix run home-manager -- init --switch
+
 # - name: Check if command already exists
 #   # ansible.builtin.command:
 #   #   argv:
@@ -31,21 +91,21 @@
 #   when: dir_check.stat.exists
 
 # https://docs.ansible.com/ansible-core/2.16/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
-- name: Make sure Home Manager is initialized
-  become: true
-  become_user: "{{ username_on_the_host }}"
-  # vars:
-  #   allow_world_readable_tmpfiles: true
-  ansible.builtin.command:
-    argv:
-      - /nix/var/nix/profiles/default/bin/nix
-      - run
-      - home-manager/master
-      - --
-      - init
-    creates: /home/{{ username_on_the_host }}/.config/home-manager
-  register: command_check
-  changed_when: false
+# - name: Make sure Home Manager is initialized
+#   become: true
+#   become_user: "{{ username_on_the_host }}"
+#   # vars:
+#   #   allow_world_readable_tmpfiles: true
+#   ansible.builtin.command:
+#     argv:
+#       - /nix/var/nix/profiles/default/bin/nix
+#       - run
+#       - home-manager/master
+#       - --
+#       - init
+#     creates: /home/{{ username_on_the_host }}/.config/home-manager
+#   register: command_check
+#   changed_when: false
 # move only file "home.nix" to backup somewhere
 
 # Clone a repo .config/home-manager

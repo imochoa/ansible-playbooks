@@ -80,6 +80,7 @@
         }
     },
     "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+    "ansible.python.interpreterPath": "/usr/local/bin/python",
     // DONT SET INTERPRETER
     // "ansible.python.interpreterPath": "/usr/bin/python"
 }

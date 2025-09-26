@@ -23,10 +23,13 @@ unix:
     extensions:
       # talon
       - andreasarvidsson.andreas-talon
+      # cursorless
       - pokey.cursorless
-      # todo: look into:
       - pokey.parse-tree
       - pokey.talon
+      # includes pokey.command-server and sleistner.vscode-fileutils
+      # pokey.git-branchless
+      # pokey.semantic-movement
       # necessary?
       # - mrob95.vscode-talonscript
       - usernamehw.errorlens
@@ -36,12 +39,12 @@ unix:
       - ms-vscode-remote.remote-containers
       - ms-vscode-remote.remote-ssh
       - ms-vscode-remote.remote-ssh-edit
-      - ms-vscode-remote.remote-wsl
+      # - ms-vscode-remote.remote-wsl
       - ms-vscode-remote.vscode-remote-extensionpack
       - ms-vscode.remote-explorer
       - ms-vscode.remote-server
-      # systemd
-      - coolbear.systemd-unit-file
+      # systemd -> use dev-container instead
+      # - coolbear.systemd-unit-file
       # - # python
       - ms-python.debugpy
       - ms-python.python
@@ -50,14 +53,13 @@ unix:
       - jnoortheen.nix-ide
       # - mkhl.direnv
       - arrterian.nix-env-selector
-      # # ansible
       # - redhat.ansible
-      # # yaml
+      # yaml
       - redhat.vscode-yaml
       # # cpp
       - ms-vscode.cpptools
       - xaver.clang-format
-      # # arduino
+      # arduino
       - platformio.platformio-ide
       # IDE as other programs
       - marp-team.marp-vscode
@@ -80,15 +82,35 @@ unix:
       ansible:
         "lightspeed.enabled": false
         "validation.lint.arguments": "--fix"
+      cursorless:
+        showOnStart: false
+        hatEnablement.shapes:
+          bolt: true
+          curve: true
+          fox: true
+          frame: true
+          play: true
+          wing: true
+          hole: true
+          ex: true
+          crosshairs: true
+          eye: true
 
 macos:
+  homebrew:
+    pkgs:
+      - TODO
+    casks:
+      - TODO
   homebrew_installed_packages:
     # - ansible # Installed via Pip.
     - gh
     # - ssh-copy-id
     - devcontainer
+    - awscli
     - pv
     - wget
+    - entr
     - jq
     - git
     - atuin
@@ -98,6 +120,7 @@ macos:
     - fzf
     - just
     - fd
+    - coreutils
     - ripgrep
     - bat
     - eza
@@ -149,6 +172,10 @@ macos:
     - keyboard-maestro
     - freecad
     - zotero
+    - netbirdio/tap/netbird-ui
+    - karabiner-elements
+    - kicad
+    - bambu-studio
 
 debian:
   flatpak_remote: flathub

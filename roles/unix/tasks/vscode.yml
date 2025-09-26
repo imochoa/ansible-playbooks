@@ -38,6 +38,31 @@
         # don't overwrite existing file
         force: false
 
+    # install json5
+    # run it!
+    #  npx -y -- json5 -s 2 settings.json -o settings.jsonnpx -y -- json5 -s 2 settings.json -o settings.json
+
+    # explode all paths before merging!
+    # jq '
+    # # recursive walk (from the jq cookbook)
+    # def walk(f):
+    #   if type=="object" then
+    #     . as $in
+    #     | reduce keys[] as $k ({}; . + { ($k): ($in[$k] | walk(f)) }) | f
+    #   elif type=="array" then map( walk(f) ) | f
+    #   else f
+    #   end;
+
+    # # expand dotted keys in a single object, turning numeric segments into indices
+    # def expand_dots:
+    #   to_entries
+    #   | map({ path: (.key | split(".") | map(if test("^[0-9]+$") then tonumber else . end)), val: .value })
+    #   | reduce .[] as $e ({}; setpath($e.path; $e.val));
+
+    # # apply recursively to every object
+    # walk( if type=="object" then expand_dots else . end )
+    # ' settings.json
+
     - name: Load var from file
       ansible.builtin.slurp:
         src: "{{ vscode_user_settings_json }}"

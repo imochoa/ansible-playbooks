@@ -31,9 +31,7 @@
             },
             "extensions": [
                 "ms-python.python",
-                "vscoss.vscode-ansible",
                 "redhat.ansible",
-                // "ms-vscode-remote.remote-containers",
                 "esbenp.prettier-vscode"
             ]
         }

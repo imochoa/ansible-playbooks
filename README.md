@@ -1,16 +1,22 @@
-# mac todos
+# talon todos
 
-# for talon...
+# mac todos
 
 defaults write com.apple.finder AppleShowAllFiles true
 killall Finder
 
-homebrew is not the recommended way to install podman on mac
-https://podman.io/docs/installation#macos
-
 https://iterm2.com/documentation-shell-integration.html
 
 softwareupdate --install-rosetta
+
+set up keybindings?
+https://mvysny.github.io/unifying-mac-linux/
+
+https://github.com/ttscoff/KeyBindings
+
+https://github.com/jeswin/mac2linux/blob/main/Simple.md
+
+https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
 
 # TODO
 

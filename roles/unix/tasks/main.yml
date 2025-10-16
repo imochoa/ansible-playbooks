@@ -10,11 +10,11 @@
 #     msg: do not print this
 
 - name: Set up Joplin
-  when: unix.install_joplin
+  when: unix.joplin.install
   ansible.builtin.import_tasks: joplin.yml
 
 - name: Set up VSCode
-  when: unix.install_vscode
+  when: unix.vscode.install
   ansible.builtin.import_tasks: vscode.yml
 
 - name: Set up SSH
@@ -24,7 +24,7 @@
   ansible.builtin.import_tasks: git.yml
 
 - name: Set up nix
-  when: unix.install_nix
+  when: unix.nix.install
   ansible.builtin.import_tasks: nix.yml
 
 # xournal

@@ -1,25 +1,27 @@
 ---
-joplin_plugins:
-  - com.whatever.inline-tags
-  - com.whatever.quick-links
-  - joplin.plugin.alondmnt.history-panel
-  - joplin.plugin.benji.favorites
-  - joplin-plugin-conflict-resolution
-  - joplin.plugin.note.tabs
-  - net.rmusin.joplin-table-formatter
-
-# Linux stuff from previous config
-AnsiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
-HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
-# Loaded by default
-# default_username: debian
-timezone: Europe/Berin
-
 unix:
-  install_nix: false
-  install_vscode: true
-  install_joplin: true
+  # os_config:
+  #   locale: en_US.UTF-8
+  #   timezone: Europe/Berlin
+  #   keyboard: us
+  # AnsiblePullRepo: git@github.com:imochoa/ansible-playbooks.git
+  # ssh:
+  # git:
+  nix:
+    install: false
+    HomeManagerRepo: git@github.com:imochoa/nix-home-manager.git
+  joplin:
+    install: true
+    plugins:
+      - com.whatever.inline-tags
+      - com.whatever.quick-links
+      - joplin.plugin.alondmnt.history-panel
+      - joplin.plugin.benji.favorites
+      - joplin-plugin-conflict-resolution
+      - joplin.plugin.note.tabs
+      - net.rmusin.joplin-table-formatter
   vscode:
+    install: true
     extensions:
       # talon
       - andreasarvidsson.andreas-talon
@@ -64,7 +66,10 @@ unix:
       # IDE as other programs
       - marp-team.marp-vscode
       - skellock.just
+    #  TODO: Split this into file?
     user_settings:
+      # "plantuml.server": "http://192.168.1.100:8080",
+      # "plantuml.render": "PlantUMLServer",
       dev:
         containers:
           dockerPath: podman
@@ -98,84 +103,90 @@ unix:
 
 macos:
   homebrew:
-    pkgs:
-      - TODO
+    packages:
+      # - ansible # Installed via Pip.
+      - gh
+      # - ssh-copy-id
+      - devcontainer
+      - awscli
+      - pv
+      - wget
+      - entr
+      - jq
+      - git
+      - atuin
+      - neovim
+      - tree
+      - lazygit
+      - fzf
+      - just
+      - fd
+      - coreutils
+      - ripgrep
+      - bat
+      - eza
+      - zoxide
+      - direnv
+      - ffmpeg
+      - uv
+      - watchexec
+      # podman -> via podman-desktop
     casks:
-      - TODO
-  homebrew_installed_packages:
-    # - ansible # Installed via Pip.
-    - gh
-    # - ssh-copy-id
-    - devcontainer
-    - awscli
-    - pv
-    - wget
-    - entr
-    - jq
-    - git
-    - atuin
-    - neovim
-    - tree
-    - lazygit
-    - fzf
-    - just
-    - fd
-    - coreutils
-    - ripgrep
-    - bat
-    - eza
-    - zoxide
-    - direnv
-    - ffmpeg
-    - uv
-    - watchexec
-    # podman -> via podman-desktop
-
-  homebrew_installed_casks:
-    - firefox
-    - chromium
-    - iterm2
-    # - karabiner-elements
-    - macfuse
-    - vorta
-    - rectangle
-    - slack
-    - scroll-reverser
-    - podman-desktop
-    - joplin
-    - raycast
-    - visual-studio-code
-    - microsoft-teams
-    - vlc
-    - syncthing
-    - keepassxc
-    - font-hack-nerd-font
-    - font-fira-code-nerd-font
-    - wacom-tablet
-    - 1password
-    - freeplane
-    # - talon
-    - onedrive
-    - key-codes
-    - wezterm
-    - hoppscotch
-    - homerow
-    # - microsoft-outlook
-    - microsoft-excel
-    - microsoft-word
-    - microsoft-powerpoint
-    # do I want to keep these?
-    - shottr
-    # - time-out # annoying warnings...
-    # - lookaway # paid service...
-    - breaktimer
-    - keyboard-maestro
-    - freecad
-    - zotero
-    - netbirdio/tap/netbird-ui
-    - karabiner-elements
-    - kicad
-    - bambu-studio
+      - firefox
+      - inkscape
+      - dbeaver-community
+      - chromium
+      - iterm2
+      # - karabiner-elements
+      - macfuse
+      - vorta
+      # If you plan on mounting archives using macFUSE, consider using the Tap
+      # maintained by the Borg team:
+      #     # do we need this? # brew install --cask macfuse
+      #     brew install borgbackup/tap/borgbackup-fuse
+      - rectangle
+      - slack
+      # - localsend
+      - scroll-reverser
+      - podman-desktop
+      - joplin
+      - raycast
+      - visual-studio-code
+      - microsoft-teams
+      - vlc
+      - syncthing
+      - keepassxc
+      - font-hack-nerd-font
+      - font-fira-code-nerd-font
+      - wacom-tablet
+      - 1password
+      - freeplane
+      # - talon
+      - onedrive
+      - key-codes
+      - wezterm
+      - hoppscotch
+      - homerow
+      # - microsoft-outlook
+      - microsoft-excel
+      - microsoft-word
+      - microsoft-powerpoint
+      # do I want to keep these?
+      - shottr
+      # - time-out # annoying warnings...
+      # - lookaway # paid service...
+      - breaktimer
+      - keyboard-maestro
+      - freecad
+      - zotero
+      - netbirdio/tap/netbird-ui
+      - karabiner-elements
+      - kicad
+      - bambu-studio
+      # brew install --cask dangerzone
+      #             /Applications/Dangerzone.app/Contents/MacOS/dangerzone-cli --set-container-runtime podman
+      # source tree?
+      # source git?
 
 debian:
   flatpak_remote: flathub

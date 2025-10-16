@@ -29,4 +29,4 @@
       loop: "{{ filtered_joplin_plugins }}"
       vars:
         joplin_plugin_list: "{{ cmd_joplin_plugins.stdout | split() }}"
-        filtered_joplin_plugins: "{{ joplin_plugins | difference(joplin_plugin_list) }}"
+        filtered_joplin_plugins: "{{ unix.joplin.plugins | difference(joplin_plugin_list) }}"

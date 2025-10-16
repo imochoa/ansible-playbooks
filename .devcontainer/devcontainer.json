@@ -8,9 +8,13 @@
         "vscode": {
             "settings": {
                 "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.shellcheck": "explicit"
+                },
                 "files.associations": {
                     "local.yml": "ansible",
                     "tasks/*.yml": "ansible",
+                    "roles/*.yml": "ansible",
                     // "*init.yml": "yaml",
                     "*plays.yml": "ansible",
                     "*init.yml": "yaml"
@@ -19,8 +23,12 @@
                 // "[jsonc]": {
                 //     "editor.defaultFormatter": "vscode.json-language-features"
                 // },
+                // TODO Language Server?
+                // "bashIde.explainshellEndpoint": "http://localhost:5000",
+                // For security reasons, it defaults to "", which disables explainshell integration. When set, this extension will send requests to the endpoint and displays documentation for flags. We recommend using a local Docker image (see https://github.com/bash-lsp/bash-language-server/issues/180).
                 "[ansible]": {
-                    "editor.defaultFormatter": "redhat.ansible"
+                    // "editor.defaultFormatter": "redhat.ansible"
+                    "editor.defaultFormatter": "redhat.vscode-yaml"
                 },
                 // redhat.vscode-yaml plugin
                 "yaml.format.enable": true,
@@ -32,7 +40,11 @@
             "extensions": [
                 "ms-python.python",
                 "redhat.ansible",
-                "esbenp.prettier-vscode"
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode",
+                "mads-hartmann.bash-ide-vscode"
+                // "timonwong.shellcheck",
+                // "foxundermoon.shell-format"
             ]
         }
     }

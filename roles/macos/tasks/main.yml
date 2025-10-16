@@ -26,13 +26,13 @@
   # become: true
   # become_user: "{{ user_name }}"
   community.general.homebrew:
-    name: "{{ macos.homebrew_installed_packages }}"
+    name: "{{ macos.homebrew.packages }}"
     state: present
 
 # requires a lot of password entry...
 - name: Install a Homebrew cask
   community.general.homebrew_cask:
-    name: "{{ macos.homebrew_installed_casks }}"
+    name: "{{ macos.homebrew.casks }}"
     state: present
 
 - name: Upgrade all packages

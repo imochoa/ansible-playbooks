@@ -1,6 +1,6 @@
 # https://forum.ansible.com/t/devcontainers-for-ansible-collection-development/3774/2
 
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /home/vscode
 
@@ -8,6 +8,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git \
     ssh \
+    shfmt \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Ansible and related tools
